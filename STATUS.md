@@ -11,8 +11,10 @@ Order agreed with David: Phase 6 → Phase 7 → Home screen (9.0) → remaining
 | 5 Research gate | ⏸ waiting for approval | Draft in `docs/PHASE5_PROPOSAL.md` – sources **not yet verified** (network policy blocked the golf sites). Until approved: equal split, equal category weights |
 | 6 Social | ✅ done | Friends (search, requests), groups (create/invite/join/leave, admins, titles toggle), leaderboards (category/overall/activity/per drill), fun titles (daily pg_cron), feed, friend profile, privacy settings, rank change after a drill. Migration `0002_social.sql` |
 | 7 Achievements | ✅ done | 6 medals, 13 achievements, 10 title badges; server-side checks (triggers + daily job), Achievements screen with progress and detail sheet, unlock toasts with vibration/sound, achievements in group feed. Migration `0003_achievements.sql` |
-| 9.0 Home screen | ⏳ next | Spec in PROMPT.md 9.0 |
+| 9.0 Home screen | ✅ done | Replaces "Today": real + training HCP, category HCPs with gap, weekly goal, recent sessions (→ session detail), recent achievements, newest friend session, my rank per group and board incl. titles; empty states and offline cache |
 | 8 Wrap-up | ⏳ | Round stats, account deletion, polish |
+
+**Next:** open items of Phases 2–4 (17 pictograms, English drill texts, drag and drop, station signals, charts, XLSX export), then Phase 8.
 
 ## Database migrations (run each once in the Supabase SQL editor, in order)
 | File | Status on Supabase |

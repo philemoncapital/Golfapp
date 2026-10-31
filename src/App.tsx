@@ -3,7 +3,8 @@ import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { db, getSettings } from './lib/db';
 import { useLive } from './lib/useLive';
-import Today from './screens/Today';
+import Home from './screens/Home';
+import SessionDetail from './screens/SessionDetail';
 import Social from './screens/Social';
 import Group from './screens/Group';
 import FriendProfile from './screens/FriendProfile';
@@ -44,7 +45,8 @@ export default function App() {
     <div className="app">
       <main className="main">
         <Routes>
-          <Route path="/" element={<Today />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/sessions/:id" element={<SessionDetail />} />
           <Route path="/drills" element={<Library />} />
           <Route path="/drills/:id" element={<DrillDetail />} />
           <Route path="/session" element={<SessionBuilder />} />

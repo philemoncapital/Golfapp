@@ -180,6 +180,29 @@ const de3 = {
     title_overall_last: { name: 'Ballspender', crit: 'Letzter Platz der Gesamt-Rangliste einer Gruppe' },
   },
 };
+// ---- Home screen (9.0)
+const de4 = {
+  home: {
+    noHcp: 'Noch kein echtes Handicap eingetragen.', overallNeeds: 'Gesamtwert ab 2 Bereichen mit genug Daten.', gap: 'Abstand zum echten Handicap',
+    sessions: 'Letzte Sessions', noSessions: 'Noch keine abgeschlossene Session.', buildFirst: 'Erste Session zusammenstellen',
+    results_one: '{{count}} Ergebnis', results_other: '{{count}} Ergebnisse', noResultsInSession: 'Keine Ergebnisse gespeichert',
+    achievements: 'Zuletzt erreicht', noAchievements: 'Noch keine Erfolge – die erste Session bringt „Erster Abschlag“.',
+    friend: 'Neu bei Freunden', noFriendSession: 'Noch keine Session von Freunden zu sehen.', addFriends: 'Freunde hinzufügen',
+    groups: 'Meine Platzierungen', noGroups: 'Noch in keiner Gruppe.', social: 'Freunde & Gruppen',
+    needsAccount: 'Erfolge, Freunde und Platzierungen brauchen ein Konto.', sessionMissing: 'Session nicht gefunden.', rejected: 'vom Server abgelehnt',
+  },
+};
+const en4: typeof de4 = {
+  home: {
+    noHcp: 'No real handicap entered yet.', overallNeeds: 'Overall value from 2 categories with enough data.', gap: 'Gap to real handicap',
+    sessions: 'Recent sessions', noSessions: 'No completed session yet.', buildFirst: 'Build your first session',
+    results_one: '{{count}} result', results_other: '{{count}} results', noResultsInSession: 'No results saved',
+    achievements: 'Recently earned', noAchievements: 'No achievements yet – your first session earns “First Tee”.',
+    friend: 'New from friends', noFriendSession: 'No friend sessions to show yet.', addFriends: 'Add friends',
+    groups: 'My placements', noGroups: 'Not in a group yet.', social: 'Friends & groups',
+    needsAccount: 'Achievements, friends and placements need an account.', sessionMissing: 'Session not found.', rejected: 'rejected by the server',
+  },
+};
 const en3: typeof de3 = {
   tier: { bronze: 'Bronze', silver: 'Silver', gold: 'Gold' },
   achv: {
@@ -221,5 +244,5 @@ const en3: typeof de3 = {
   },
 };
 
-i18n.use(initReactI18next).init({ resources: { de: { translation: { ...de, ...de2, ...de3 } }, en: { translation: { ...en, ...en2, ...en3 } } }, lng: 'de', fallbackLng: 'de', interpolation: { escapeValue: false } });
+i18n.use(initReactI18next).init({ resources: { de: { translation: { ...de, ...de2, ...de3, ...de4 } }, en: { translation: { ...en, ...en2, ...en3, ...en4 } } }, lng: 'de', fallbackLng: 'de', interpolation: { escapeValue: false } });
 export default i18n;

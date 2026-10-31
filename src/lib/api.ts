@@ -73,5 +73,6 @@ export const api = {
   titles: (group: string) => rpc<Title[]>('visible_titles', { p_group: group }),
   feed: (group: string) => rpc<FeedItem[]>('group_feed', { p_group: group, p_limit: 30 }),
   standings: () => rpc<Standing[]>('my_group_standings'),
+  recentAchievements: () => rpc<import('../engine/achievements').AchRow[]>('my_recent_achievements', { p_limit: 8 }),
   latestFriendSession: async () => (await rpc<FriendSession[]>('latest_friend_session'))[0] ?? null,
 };
