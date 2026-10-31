@@ -1,10 +1,12 @@
 import { supabase } from './supabase';
+import { isDemo } from './demo';
 import { db } from './db';
 import { ApiError } from './api';
 import { onSync } from './sync';
 import { newUnlocks, seenState, type AchRow } from '../engine/achievements';
 
 export async function loadMyAchievements(): Promise<AchRow[]> {
+  if (isDemo) return (await import('../demo/api')).loadMyAchievementsDemo();
   if (!supabase) throw new ApiError('signed_out');
   if (!navigator.onLine) throw new ApiError('offline');
   const { data: s } = await supabase.auth.getSession();

@@ -15,6 +15,7 @@ import Live from './screens/Live';
 import Profile from './screens/Profile';
 import Achievements from './screens/Achievements';
 import { UnlockToasts } from './components/UnlockToasts';
+import { isDemo, setDemo } from './lib/demo';
 
 const I = {
   today: <path d="M4 12h3l2-6 4 12 2-6h5" />,
@@ -43,6 +44,12 @@ export default function App() {
 
   return (
     <div className="app">
+      {isDemo && (
+        <div className="demo-banner" role="status">
+          <span>{t('demo.banner')}</span>
+          <button className="btn" onClick={() => setDemo(false)}>{t('demo.exit')}</button>
+        </div>
+      )}
       <main className="main">
         <Routes>
           <Route path="/" element={<Home />} />

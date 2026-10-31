@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { db, getSettings } from './db';
+import { isDemo } from './demo';
 
 export type SyncState = 'offline' | 'local' | 'ok' | 'error' | 'syncing';
 type Listener = (s: SyncState, pushed: number) => void;
@@ -20,7 +21,7 @@ export function syncNow(): Promise<SyncState> {
 }
 
 async function run(): Promise<SyncState> {
-  if (!supabase) { emit('local'); return 'local'; }
+  if (!supabase || isDemo) { emit('local'); return 'local'; } // demo data is never uploaded
   if (!navigator.onLine) { emit('offline'); return 'offline'; }
   const { data: auth } = await supabase.auth.getSession();
   const user = auth.session?.user;
@@ -98,6 +99,7 @@ async function syncProfile(userId: string) {
 }
 
 export function startAutoSync() {
+  if (isDemo) { emit('local'); return; }
   window.addEventListener('online', () => void syncNow());
   supabase?.auth.onAuthStateChange((e) => { if (e === 'SIGNED_IN') void syncNow(); });
   setInterval(() => void syncNow(), 60_000);

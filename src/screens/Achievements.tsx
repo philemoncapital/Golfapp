@@ -10,6 +10,7 @@ import { fmtDate } from '../lib/format';
 import { AchIcon } from '../components/AchIcon';
 import { StaleHint, Empty } from '../components/Ui';
 import { supabase } from '../lib/supabase';
+import { isDemo } from '../lib/demo';
 
 export default function Achievements() {
   const { t } = useTranslation();
@@ -23,7 +24,7 @@ export default function Achievements() {
     <>
       <Link to="/" className="small">← {t('nav.home')}</Link>
       <h1>{t('achv.title')}</h1>
-      {!supabase || user === null ? <Empty text={t('achv.signedOut')} link={supabase ? { to: '/profile', label: t('auth.signIn') } : undefined} /> : (
+      {!isDemo && (!supabase || user === null) ? <Empty text={t('achv.signedOut')} link={supabase ? { to: '/profile', label: t('auth.signIn') } : undefined} /> : (
         <>
           <StaleHint r={data} />
           {sections.map(([label, kind]) => (

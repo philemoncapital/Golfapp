@@ -1,5 +1,6 @@
 import Dexie, { type Table } from 'dexie';
 import type { DrillResult, ResultInput } from '../engine/types';
+import { isDemo } from './demo';
 
 /** synced: 0 = queued, 1 = on the server, 2 = rejected by the server (invalid input; kept locally, never retried). */
 export interface LocalResult extends DrillResult { id: string; session_id: string | null; notes?: string; synced: 0 | 1 | 2 }
@@ -23,7 +24,7 @@ class PulseDB extends Dexie {
   settings!: Table<Settings, string>;
   cache!: Table<CacheRow, string>;
   constructor() {
-    super('pulse');
+    super(isDemo ? 'pulse-demo' : 'pulse'); // demo data never mixes with real data
     this.version(1).stores({ results: 'id, drill_id, created_at, synced', sessions: 'id, created_at, status, synced', settings: 'key' });
     this.version(2).stores({ results: 'id, drill_id, created_at, synced, session_id', sessions: 'id, created_at, status, synced, completed_at', settings: 'key', cache: 'key' });
   }

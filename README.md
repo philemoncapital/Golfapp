@@ -34,3 +34,6 @@ Database tests: `npm run test:db` starts a throw-away local Postgres 16, applies
 
 ## Docs
 `PROMPT.md` (full spec) · `STATUS.md` (what is done) · `ASSUMPTIONS.md` · `SECURITY.md` · `CREDITS.md`
+
+## Demo mode (test data)
+Open the app with `?demo=1` (or *Profile → View demo with test data*). It uses a separate local database (`pulse-demo`) with invented data: you with 30 sessions, 10 test friends with 20–30 sessions each, two groups and one pending invitation. Boards, titles, feed and achievements are computed in the browser by `src/demo/compute.ts`, which mirrors the server rules (0002/0003). Nothing is sent to Supabase; sync is switched off. Leave with the banner button or `?demo=0`.

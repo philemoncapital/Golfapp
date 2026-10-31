@@ -5,6 +5,7 @@ import { useLive } from '../lib/useLive';
 import { useRemote } from '../lib/useRemote';
 import { useUser } from '../lib/auth';
 import { supabase } from '../lib/supabase';
+import { isDemo } from '../lib/demo';
 import { api, type FriendSession, type Standing } from '../lib/api';
 import { DRILLS, CAT_COLOR, drillById } from '../lib/drills';
 import { categoryHcps, overallHcp } from '../engine/handicap';
@@ -22,7 +23,7 @@ export default function Home() {
   const settings = useLive(getSettings, [], null);
   const results = useLive(() => db.results.toArray(), [], [] as LocalResult[]);
   const sessions = useLive(() => db.sessions.toArray(), [], [] as LocalSession[]);
-  const online = !!supabase && !!user;
+  const online = isDemo || (!!supabase && !!user);
 
   const cats = categoryHcps(DRILLS, results);
   const overall = overallHcp(cats);

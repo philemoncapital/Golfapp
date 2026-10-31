@@ -59,3 +59,7 @@ Everything the app computes that is not stated in the drill booklet is listed he
 - **Captain**: owner of a group with ≥ 3 active members (invited members do not count).
 - **Dynasty / weeks held**: days held as leader in one stretch ≥ 28; title badges count full weeks summed over all stretches.
 - Toasts: each device announces an unlock once (key + tier / number of Flawless drills). On the first load of a device nothing is announced; existing unlocks are just recorded.
+
+## Demo mode
+- All demo players, sessions and results are invented test data, not golf facts. Results are real drill inputs chosen so that their training HCP follows each player's real HCP ± a random category offset, improving slowly over 100 days, plus noise (σ = 3.5 HCP).
+- Demo title "since" dates are pseudo-random (3–40 days ago); achievement dates are reconstructed from the generated history.
