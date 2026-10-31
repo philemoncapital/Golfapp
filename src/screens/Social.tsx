@@ -5,6 +5,7 @@ import { api, ApiError, type Friend, type MyGroup, type SearchHit } from '../lib
 import { useRemote } from '../lib/useRemote';
 import { useUser } from '../lib/auth';
 import { supabase } from '../lib/supabase';
+import { isDemo } from '../lib/demo';
 import { StaleHint, Empty } from '../components/Ui';
 
 export function useErrorText() {
@@ -20,6 +21,7 @@ export function useErrorText() {
 /** Shown instead of social content when there is no backend or nobody is signed in. Returns true when blocked. */
 export function SocialGate({ user }: { user: ReturnType<typeof useUser> }) {
   const { t } = useTranslation();
+  if (isDemo) return null;
   if (!supabase) return <Empty text={t('common.localMode')} />;
   if (user === null) return <Empty text={t('common.signedOut')} link={{ to: '/profile', label: t('auth.signIn') }} />;
   return null;

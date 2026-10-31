@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
+import { isDemo } from '../lib/demo';
 import { useUser } from '../lib/auth';
 import { useRemote } from '../lib/useRemote';
 import { ApiError } from '../lib/api';
@@ -20,6 +21,7 @@ interface FriendData {
 }
 
 async function loadFriend(id: string): Promise<FriendData> {
+  if (isDemo) return (await import('../demo/api')).loadFriendDemo(id) as Promise<FriendData>;
   if (!supabase) throw new ApiError('signed_out');
   if (!navigator.onLine) throw new ApiError('offline');
   const [p, v, r, s, b] = await Promise.all([

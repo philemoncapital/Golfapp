@@ -6,9 +6,12 @@ import './styles.css';
 import App from './App';
 import { startAutoSync } from './lib/sync';
 import { startUnlockWatch } from './lib/achievements';
+import { isDemo } from './lib/demo';
 
 startUnlockWatch();
 startAutoSync();
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const render = () => ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode><BrowserRouter><App /></BrowserRouter></React.StrictMode>,
 );
+if (isDemo) void import('./demo/api').then((m) => m.seedDemo()).finally(render);
+else render();

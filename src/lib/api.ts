@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { db } from './db';
+import { isDemo } from './demo';
 
 export type Board = 'overall' | 'tee' | 'approach' | 'short' | 'putting' | 'activity';
 export const RANK_BOARDS: Board[] = ['overall', 'tee', 'approach', 'short', 'putting'];
@@ -45,7 +46,7 @@ export async function cached<T>(key: string, load: () => Promise<T>): Promise<{ 
   }
 }
 
-export const api = {
+const realApi = {
   myFriends: () => rpc<Friend[]>('my_friends'),
   search: (q: string) => rpc<SearchHit[]>('search_users', { q }),
   requestFriend: (target: string) => rpc<Relation>('request_friend', { target }),
@@ -76,3 +77,11 @@ export const api = {
   recentAchievements: () => rpc<import('../engine/achievements').AchRow[]>('my_recent_achievements', { p_limit: 8 }),
   latestFriendSession: async () => (await rpc<FriendSession[]>('latest_friend_session'))[0] ?? null,
 };
+
+type Api = typeof realApi;
+/** In demo mode every call goes to the in-memory demo backend (loaded on demand, not part of the normal bundle). */
+const demoProxy = Object.fromEntries(Object.keys(realApi).map((k) => [k, async (...a: unknown[]) => {
+  const { demoApi } = await import('../demo/api');
+  return (demoApi as unknown as Record<string, (...x: unknown[]) => unknown>)[k](...a);
+}])) as unknown as Api;
+export const api: Api = isDemo ? demoProxy : realApi;

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { db, getSettings, type Settings, type Visibility } from '../lib/db';
 import { syncNow } from '../lib/sync';
+import { isDemo, setDemo } from '../lib/demo';
 import { supabase } from '../lib/supabase';
 import { drillById } from '../lib/drills';
 import { resultHcp } from '../engine/handicap';
@@ -74,6 +75,9 @@ export default function Profile() {
         <section className="card row between"><span className="small text-2">{user.email}</span><button className="btn" onClick={() => supabase!.auth.signOut()}>{t('profile.signOut')}</button></section>
       ) : <Auth />) : <p className="small muted">{t('profile.local')}</p>}
       <Link to="/achievements" className="btn block">{t('achv.all')}</Link>
+      {isDemo ? <button className="btn block" onClick={() => setDemo(false)}>{t('demo.exit')}</button>
+        : <button className="btn block" onClick={() => setDemo(true)}>{t('demo.enter')}</button>}
+      {!isDemo && <span className="small muted">{t('demo.hint')}</span>}
       <button className="btn block" onClick={exportCsv}>{t('profile.export')}</button>
     </>
   );

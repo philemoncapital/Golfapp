@@ -14,6 +14,8 @@ Order agreed with David: Phase 6 → Phase 7 → Home screen (9.0) → remaining
 | 9.0 Home screen | ✅ done | Replaces "Today": real + training HCP, category HCPs with gap, weekly goal, recent sessions (→ session detail), recent achievements, newest friend session, my rank per group and board incl. titles; empty states and offline cache |
 | 8 Wrap-up | ⏳ | Round stats, account deletion, polish |
 
+- **Demo mode** (`?demo=1`): invented test data (30 sessions, 10 friends, 2 groups), local only.
+
 **Next:** open items of Phases 2–4 (17 pictograms, English drill texts, drag and drop, station signals, charts, XLSX export), then Phase 8.
 
 ## Database migrations (run each once in the Supabase SQL editor, in order)

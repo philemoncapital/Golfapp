@@ -182,6 +182,7 @@ const de3 = {
 };
 // ---- Home screen (9.0)
 const de4 = {
+  demo: { banner: 'Demo – erfundene Testdaten, nichts wird gespeichert oder gesendet.', exit: 'Demo beenden', enter: 'Demo mit Testdaten ansehen', hint: 'Zeigt die App mit 30 erfundenen Sessions, 10 Testfreunden und 2 Gruppen. Deine echten Daten bleiben unberührt.' },
   home: {
     noHcp: 'Noch kein echtes Handicap eingetragen.', overallNeeds: 'Gesamtwert ab 2 Bereichen mit genug Daten.', gap: 'Abstand zum echten Handicap',
     sessions: 'Letzte Sessions', noSessions: 'Noch keine abgeschlossene Session.', buildFirst: 'Erste Session zusammenstellen',
@@ -193,6 +194,7 @@ const de4 = {
   },
 };
 const en4: typeof de4 = {
+  demo: { banner: 'Demo – invented test data, nothing is saved or sent.', exit: 'Leave demo', enter: 'View demo with test data', hint: 'Shows the app with 30 invented sessions, 10 test friends and 2 groups. Your real data stays untouched.' },
   home: {
     noHcp: 'No real handicap entered yet.', overallNeeds: 'Overall value from 2 categories with enough data.', gap: 'Gap to real handicap',
     sessions: 'Recent sessions', noSessions: 'No completed session yet.', buildFirst: 'Build your first session',
