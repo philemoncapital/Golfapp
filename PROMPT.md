@@ -227,6 +227,23 @@ Tie rule: equal values share a rank; between tied members the earlier achievemen
 
 ## 9. Features
 
+### 9.0 Home screen (start page, replaces "Today")
+The home screen is the app's start page (route `/`, nav item "Home"). It replaces the former "Today" screen and pulls together data from the other features. Order from top to bottom:
+
+1. **Handicap header:** real handicap and overall training handicap side by side (big numbers, section 11). The training HCP is labelled as an estimate from training drills (6.3).
+2. **Training handicap per category:** one row per category (category colour dot, category HCP, gap to the real handicap, e.g. "+3.2"). A gap > 2.0 uses the weakness highlight colour. Categories without enough data show "not enough data" (6.3 rule).
+3. **Weekly goal:** practice minutes this week (Monday–Sunday, local time) versus the weekly minute goal, as a 6 px progress bar (9.4).
+4. **Recent sessions:** the last 3–5 completed sessions with date, duration, drills played and result (number of results and the mean drill HCP of that session). Tapping opens the session.
+5. **Recent achievements and medals:** the latest unlocked achievements, medal tiers and title badges (8.3–8.5), with pictogram and date; link to the Achievements screen.
+6. **Friends:** the newest completed session of any friend (name, date, duration, drills, result), according to that friend's privacy settings (9.8).
+7. **My groups:** for every group I am in, my rank on each category board and the overall board ("2 / 5"), plus the titles I currently hold there (8.1, 8.2). Members who are not yet eligible see "not ranked yet" with the eligibility rule.
+
+Rules:
+- Style as in section 11: one card per block, labels in 11 px uppercase, tabular numerals, at most one filled primary button (e.g. "Start session"), no charting-library look.
+- **Empty states** for every block as long as data is missing, each saying what fills it: no real handicap yet → link to the profile; no results → "build your first session"; no achievements yet; no friends yet → link to add friends; no groups yet → link to create or join a group; signed out or local mode → explain that friends and groups need an account.
+- Works offline: own data comes from the local store; friend and group blocks show the last cached values with a "last updated" hint.
+- All ranks, titles and achievements come from server-side functions (sections 3 and 8); the client never computes another member's rank.
+
 ### 9.1 Onboarding and profile
 Sign up (name, email, password, email verification), then display name, real handicap, preferred language and weekly minute goal. The handicap is editable at any time and its history is kept.
 
@@ -368,4 +385,5 @@ The goal is a middle ground: dark and modern like current sports apps, but neith
 5. **Research gate:** approach drill research and recommendation sources. **Stop for user approval.** Then seed the approved drills and build the recommendation engine and the 5-session review.
 6. **Social:** friends, groups, leaderboards, fun titles, privacy.
 7. **Achievements:** medals, achievements and title badges, the Achievements screen, unlock toasts.
+   - **Home screen (9.0)** follows directly after Phases 6 and 7, because it needs their data.
 8. **Wrap-up:** round stats, notes, export and account deletion, polish, deployment docs.

@@ -5,7 +5,9 @@ import './i18n';
 import './styles.css';
 import App from './App';
 import { startAutoSync } from './lib/sync';
+import { startUnlockWatch } from './lib/achievements';
 
+startUnlockWatch();
 startAutoSync();
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode><BrowserRouter><App /></BrowserRouter></React.StrictMode>,

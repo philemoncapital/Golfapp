@@ -11,6 +11,7 @@ import type { ResultInput as RI } from '../engine/types';
 import { signal, keepAwake, canVibrate } from '../lib/feedback';
 import { syncNow } from '../lib/sync';
 import { fmtTarget } from './DrillDetail';
+import { snapshot, movesAfterSync, type RankMove } from '../lib/rankChange';
 
 const mmss = (s: number) => `${Math.floor(Math.max(0, s) / 60)}:${String(Math.floor(Math.max(0, s) % 60)).padStart(2, '0')}`;
 
@@ -27,6 +28,7 @@ export default function Live() {
   const [input, setInput] = useState<RI | null>(null);
   const [notes, setNotes] = useState('');
   const [summary, setSummary] = useState<{ hcp: number } | null>(null);
+  const [moves, setMoves] = useState<RankMove[]>([]);
   const signalled = useRef(false);
 
   useEffect(() => { void keepAwake(true); return () => void keepAwake(false); }, []);
@@ -45,8 +47,11 @@ export default function Live() {
 
   const save = async () => {
     if (!input) return;
+    const before = await snapshot(drill.category);
     await saveResult(drill.id, input, session.id, notes || undefined);
     setSummary({ hcp: resultHcp(drill, input) });
+    setMoves([]);
+    void movesAfterSync(before, drill.category).then(setMoves);
   };
   const next = async () => {
     setSummary(null); setInput(null); setNotes(''); signalled.current = false;
@@ -89,6 +94,7 @@ export default function Live() {
         <section className="card stack">
           <span className="label">{t('live.yourHcp')}</span>
           <span className="big">{summary.hcp < 0 ? `+${Math.abs(summary.hcp)}` : summary.hcp}</span>
+          {moves.map((m) => <span key={m.group} className="small me" role="status">{m.from == null ? t('group.nowRanked', { group: m.group, to: m.to }) : t('group.moved', { group: m.group, from: m.from, to: m.to })}</span>)}
           {band && <span className="text-2">{t('live.target')} (HCP {band.hcp_hi}–{band.hcp_lo}): <b className="num">{fmtTarget(band.target)}</b></span>}
           <button className="btn primary block" onClick={next}>{idx + 1 < n ? t('live.next') : t('live.finish')}</button>
         </section>

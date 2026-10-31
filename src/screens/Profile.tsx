@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { db, getSettings, type Settings } from '../lib/db';
+import { Link } from 'react-router-dom';
+import { db, getSettings, type Settings, type Visibility } from '../lib/db';
+import { syncNow } from '../lib/sync';
 import { supabase } from '../lib/supabase';
 import { drillById } from '../lib/drills';
 import { resultHcp } from '../engine/handicap';
@@ -23,8 +25,9 @@ export default function Profile() {
   if (!s) return null;
 
   const save = async () => {
-    await db.settings.put(s);
-    if (supabase && user) await supabase.from('profiles').update({ real_hcp: s.real_hcp, weekly_goal_min: s.weekly_goal_min, language: s.language, accent: s.accent }).eq('id', user.id);
+    // Saved locally first (works offline); the sync pushes it to the server and records the HCP history.
+    await db.settings.put({ ...s, dirty: true });
+    if (user) void syncNow();
     setSaved(true); setTimeout(() => setSaved(false), 1500);
   };
   const exportCsv = async () => {
@@ -53,9 +56,24 @@ export default function Profile() {
           <div className="row">{ACCENTS.map((c) => <button key={c} aria-label={c} aria-pressed={s.accent === c} onClick={() => setS({ ...s, accent: c })} style={{ width: 36, height: 36, borderRadius: 18, background: c, border: s.accent === c ? '3px solid var(--text)' : '1px solid var(--border)', cursor: 'pointer' }} />)}</div></div>
         <button className="btn primary block" onClick={save}>{saved ? `✓ ${t('profile.saved')}` : t('profile.save')}</button>
       </section>
+      {supabase && user && (
+        <section className="card stack" aria-label={t('privacy.title')}>
+          <h2>{t('privacy.title')}</h2>
+          <label className="stack"><span className="label">{t('privacy.name')}</span>
+            <input className="field" value={s.display_name ?? ''} minLength={2} maxLength={40} onChange={(e) => setS({ ...s, display_name: e.target.value })} autoComplete="nickname" /></label>
+          <div className="stack"><span className="label">{t('privacy.results')}</span>
+            <div className="row wrap">{(['friends', 'groups', 'nobody'] as Visibility[]).map((v) => <button key={v} className="chip" aria-pressed={s.results_visibility === v} onClick={() => setS({ ...s, results_visibility: v })}>{t(`privacy.${v}`)}</button>)}</div></div>
+          <label className="row between"><span className="small">{t('privacy.showHcp')}</span>
+            <input type="checkbox" checked={!!s.show_real_hcp} onChange={(e) => setS({ ...s, show_real_hcp: e.target.checked })} style={{ width: 22, height: 22 }} /></label>
+          <label className="row between"><span className="small">{t('privacy.hideLast')}</span>
+            <input type="checkbox" checked={!!s.hide_last_place_titles} onChange={(e) => setS({ ...s, hide_last_place_titles: e.target.checked })} style={{ width: 22, height: 22 }} /></label>
+          <button className="btn block" onClick={save}>{saved ? `✓ ${t('profile.saved')}` : t('profile.save')}</button>
+        </section>
+      )}
       {supabase ? (user ? (
         <section className="card row between"><span className="small text-2">{user.email}</span><button className="btn" onClick={() => supabase!.auth.signOut()}>{t('profile.signOut')}</button></section>
       ) : <Auth />) : <p className="small muted">{t('profile.local')}</p>}
+      <Link to="/achievements" className="btn block">{t('achv.all')}</Link>
       <button className="btn block" onClick={exportCsv}>{t('profile.export')}</button>
     </>
   );
