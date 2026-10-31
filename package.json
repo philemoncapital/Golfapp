@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "seed:drills": "node scripts/import-drills.mjs && node scripts/seed-sql.mjs"
+    "seed:drills": "node scripts/import-drills.mjs && node scripts/seed-sql.mjs",
+    "test:db": "bash scripts/db-test.sh",
+    "gen:hcp-vectors": "vite-node scripts/gen-hcp-vectors.ts"
   },
   "dependencies": {
     "@fontsource/inter": "^5.1.0",

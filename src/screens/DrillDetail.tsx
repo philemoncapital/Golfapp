@@ -6,6 +6,7 @@ import { db, getSettings } from '../lib/db';
 import { useLive } from '../lib/useLive';
 import { togglePlan } from '../lib/plan';
 import { targetForHcp } from '../engine/handicap';
+import { GroupDrillBoard } from '../components/GroupDrillBoard';
 import type { BandTarget } from '../engine/types';
 
 export const fmtTarget = (x: BandTarget) => (typeof x === 'number' ? String(x) : x === 'green' ? 'Grün / green' : Array.isArray(x) ? x.join('/') : `< ${x.radius_m} m`);
@@ -51,6 +52,7 @@ export default function DrillDetail() {
           </div>
         </div>
       </section>
+      <GroupDrillBoard drillId={d.id} />
       <button className={`btn block ${inPlan ? '' : 'primary'}`} onClick={() => togglePlan(d.id)}>{inPlan ? `✓ ${t('drills.added')}` : t('drills.add')}</button>
     </>
   );

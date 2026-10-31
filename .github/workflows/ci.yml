@@ -10,4 +10,5 @@ jobs:
       - run: npm ci
       - run: npm audit --audit-level=high --omit=dev
       - run: npm test
+      - run: npm run test:db
       - run: npm run build

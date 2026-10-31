@@ -97,7 +97,8 @@ export function resultHcp(drill: Drill, input: ResultInput): number {
     case 'value':
       return interpolateHcp(input.value, s.bands, s.lower_is_better);
     case 'time_fallback':
-      return interpolateHcp(timeFallbackMinutes(input.hits, input.limit_min, input.required_hits), s.bands, true);
+      // The limit always comes from the drill (as on the server), never from the stored input.
+      return interpolateHcp(timeFallbackMinutes(input.hits, drill.duration_min, input.required_hits), s.bands, true);
     case 'radius':
       return radiusHcp(input.balls, s.bands, s.pass_hits ?? Math.ceil((s.balls ?? input.balls.length) / 2), s.balls ?? input.balls.length);
     case 'triplet':
