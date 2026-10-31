@@ -10,8 +10,8 @@ Order agreed with David: Phase 6 → Phase 7 → Home screen (9.0) → remaining
 | 4 Calculations | 🟡 partly | Handicap engine ✅, **server-side recomputation ✅ (0002 trigger, parity-tested)**, personal bests (engine) ✅, dashboard ✅, CSV export ✅. **Open:** charts, XLSX export |
 | 5 Research gate | ⏸ waiting for approval | Draft in `docs/PHASE5_PROPOSAL.md` – sources **not yet verified** (network policy blocked the golf sites). Until approved: equal split, equal category weights |
 | 6 Social | ✅ done | Friends (search, requests), groups (create/invite/join/leave, admins, titles toggle), leaderboards (category/overall/activity/per drill), fun titles (daily pg_cron), feed, friend profile, privacy settings, rank change after a drill. Migration `0002_social.sql` |
-| 7 Achievements | ⏳ next | Tables exist; definitions, checks and screen open |
-| 9.0 Home screen | ⏳ after 7 | Spec in PROMPT.md 9.0 |
+| 7 Achievements | ✅ done | 6 medals, 13 achievements, 10 title badges; server-side checks (triggers + daily job), Achievements screen with progress and detail sheet, unlock toasts with vibration/sound, achievements in group feed. Migration `0003_achievements.sql` |
+| 9.0 Home screen | ⏳ next | Spec in PROMPT.md 9.0 |
 | 8 Wrap-up | ⏳ | Round stats, account deletion, polish |
 
 ## Database migrations (run each once in the Supabase SQL editor, in order)
@@ -19,7 +19,8 @@ Order agreed with David: Phase 6 → Phase 7 → Home screen (9.0) → remaining
 |---|---|
 | `0001_init.sql` + `seed.sql` | presumably applied (please confirm) |
 | `0002_social.sql` | **to run** |
+| `0003_achievements.sql` | **to run (after 0002)** |
 
 ## Tests
 - `npm test` – engine unit tests (Vitest)
-- `npm run test:db` – migrations + SQL tests on a throw-away local Postgres (HCP parity 1,520 vectors, RLS, social/privacy)
+- `npm run test:db` – migrations + SQL tests on a throw-away local Postgres (HCP parity 1,520 vectors, RLS, social/privacy, achievements)

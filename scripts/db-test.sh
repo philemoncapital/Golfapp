@@ -20,6 +20,7 @@ for f in "$ROOT"/supabase/migrations/*.sql; do echo "migrate $(basename "$f")"; 
 for t in "$ROOT"/supabase/tests/*.sql; do
   echo "test $(basename "$t")"
   if ! out="$("${PSQL[@]}" -f "$t" 2>&1)"; then echo "$out" | grep -vE "^(NOTICE|psql:.*NOTICE)" | tail -25; exit 1; fi
-  echo "$out" | grep -E 'PASSED' || { echo "$out" | tail -5; exit 1; }
+  if echo "$out" | grep -q WARNING; then echo "$out" | grep WARNING | head -5; exit 1; fi
+  echo "$out" | grep -E "PASSED" || { echo "$out" | tail -5; exit 1; }
 done
 echo "DB TESTS OK"

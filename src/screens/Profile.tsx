@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { db, getSettings, type Settings, type Visibility } from '../lib/db';
 import { syncNow } from '../lib/sync';
 import { supabase } from '../lib/supabase';
@@ -72,6 +73,7 @@ export default function Profile() {
       {supabase ? (user ? (
         <section className="card row between"><span className="small text-2">{user.email}</span><button className="btn" onClick={() => supabase!.auth.signOut()}>{t('profile.signOut')}</button></section>
       ) : <Auth />) : <p className="small muted">{t('profile.local')}</p>}
+      <Link to="/achievements" className="btn block">{t('achv.all')}</Link>
       <button className="btn block" onClick={exportCsv}>{t('profile.export')}</button>
     </>
   );

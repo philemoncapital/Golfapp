@@ -12,6 +12,8 @@ import DrillDetail from './screens/DrillDetail';
 import SessionBuilder from './screens/SessionBuilder';
 import Live from './screens/Live';
 import Profile from './screens/Profile';
+import Achievements from './screens/Achievements';
+import { UnlockToasts } from './components/UnlockToasts';
 
 const I = {
   today: <path d="M4 12h3l2-6 4 12 2-6h5" />,
@@ -51,8 +53,10 @@ export default function App() {
           <Route path="/groups/:id" element={<Group />} />
           <Route path="/friends/:id" element={<FriendProfile />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/achievements" element={<Achievements />} />
         </Routes>
       </main>
+      <UnlockToasts />
       <nav className="nav" aria-label="Main">
         <ul>
           {(['today', 'drills', 'session', 'social', 'profile'] as const).map((k) => (

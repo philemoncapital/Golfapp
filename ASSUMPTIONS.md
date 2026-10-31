@@ -44,3 +44,18 @@ Everything the app computes that is not stated in the drill booklet is listed he
 - **Personal best** = a result whose HCP is strictly lower than every earlier result of the same drill; the first result of a drill is not a PB.
 - **Declined friend requests** look like "pending" to the requester (they are not told).
 - **Per-drill board:** ranked by the best result HCP in the last 30 days; the score shown is the raw score where it is a single number.
+
+## Medals and achievements (Phase 7, 0003)
+- All checks run in the database (triggers after results, sessions, friendships, group members, titles, round stats and profile changes; plus the daily job). Clients cannot write `user_achievements`.
+- **Distinct days** (Regular) and **weeks** (Goal Getter) use the profile's timezone (sent by the app, default Europe/Berlin); weeks run Monday–Sunday.
+- **Goal Getter** = the longest run of consecutive weeks in which practice minutes reached the *current* weekly goal (the goal history is not stored).
+- **Flawless**: value drills reach `perfect` (≤ for lower-is-better drills); radius drills need `perfect` balls inside the tightest radius. Each new drill done perfectly is announced again.
+- **Complete Set** = all booklet drills; **Collector** = all seed drills (booklet + approved approach drills). They are identical until Phase 5 drills are approved.
+- **All-Rounder**: results in all 4 categories within any rolling 7 days.
+- **On Target / Next Level**: a result whose HCP is ≤ the midpoint of my own band / the next better band. A result exactly on the booklet target maps to that midpoint, so *reaching* the target counts (German "Im Soll"). Uses the current real handicap; own band = the band containing it, else the nearest band.
+- **Breakthrough**: a category HCP (≥ 2 drills) today vs. computed from results up to 30 days ago improved by ≥ 2.0.
+- **Review Ready**: 5 completed sessions (the review screen itself comes with Phase 5).
+- **Early Bird**: session start before 08:00 in the profile's timezone.
+- **Captain**: owner of a group with ≥ 3 active members (invited members do not count).
+- **Dynasty / weeks held**: days held as leader in one stretch ≥ 28; title badges count full weeks summed over all stretches.
+- Toasts: each device announces an unlock once (key + tier / number of Flawless drills). On the first load of a device nothing is announced; existing unlocks are just recorded.
