@@ -189,10 +189,19 @@ export async function loadFriendDemo(id: string) {
 
 /** Fills the demo database with "my" 30 sessions once. */
 export async function seedDemo() {
+  if ((await db.templates.count()) === 0) {
+    const ts = new Date().toISOString();
+    const tpl = (id: string, name: string, drill_ids: string[]) => ({ id, name, drill_ids, deleted: false, created_at: ts, updated_at: ts, synced: 1 as const });
+    await db.templates.bulkPut([
+      tpl('d2000000-0000-4000-8000-000000000001', 'Putten kompakt', ['circle-putting', 'draw-back', 'pace-putting']),
+      tpl('d2000000-0000-4000-8000-000000000002', 'Range-Mix 60', ['14-fairways', 'hit-three-greens', 'fade-and-draw']),
+      tpl('d2000000-0000-4000-8000-000000000003', 'Kurzes Spiel', ['hit-it-close', 'sandy-par', 'chip-to-a-towel', 'up-and-down-series']),
+    ]);
+  }
   if ((await db.sessions.count()) > 0) return;
   const w = getWorld();
   const me = PLAYERS[0];
-  await db.settings.put({ key: 'me', real_hcp: me.hcp, weekly_goal_min: 120, language: 'de', accent: '#3DFFA2', display_name: 'Demo', results_visibility: 'friends', show_real_hcp: true, hide_last_place_titles: false });
+  await db.settings.put({ key: 'me', real_hcp: me.hcp, weekly_goal_min: 120, language: 'de', accent: '#9BE3C3', display_name: 'Demo', results_visibility: 'friends', show_real_hcp: true, hide_last_place_titles: false });
   await db.sessions.bulkPut(w.sessions.filter((s) => s.user_id === DEMO_ME).map((s) => ({ id: s.id, status: 'completed' as const, drill_ids: s.drill_ids, created_at: s.started_at, started_at: s.started_at, completed_at: s.completed_at, total_min: s.total_min, synced: 1 as const })));
   await db.results.bulkPut(w.results.filter((r) => r.user_id === DEMO_ME).map((r) => ({ id: r.id, drill_id: r.drill_id, input: r.input, session_id: r.session_id, created_at: r.created_at, synced: 1 as const })));
 }

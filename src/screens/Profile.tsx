@@ -9,7 +9,7 @@ import { drillById } from '../lib/drills';
 import { resultHcp } from '../engine/handicap';
 import type { User } from '@supabase/supabase-js';
 
-const ACCENTS = ['#3DFFA2', '#FF6B4A', '#FFD23F', '#2FD6F5'];
+import { ACCENTS } from '../lib/theme';
 
 export default function Profile() {
   const { t } = useTranslation();

@@ -7,7 +7,11 @@ export interface LocalResult extends DrillResult { id: string; session_id: strin
 export interface LocalSession {
   id: string; status: 'planned' | 'started' | 'completed';
   drill_ids: string[]; created_at: string; started_at?: string; completed_at?: string; total_min: number; synced: 0 | 1;
+  /** name and source of a session started from a saved session */
+  name?: string; template_id?: string;
 }
+/** A saved, named session built in the session builder (PROMPT.md 9.2). */
+export interface LocalTemplate { id: string; name: string; drill_ids: string[]; deleted: boolean; created_at: string; updated_at: string; synced: 0 | 1 }
 export type Visibility = 'nobody' | 'friends' | 'groups';
 export interface Settings {
   key: 'me'; real_hcp: number | null; weekly_goal_min: number; language: 'de' | 'en'; accent: string;
@@ -23,10 +27,12 @@ class PulseDB extends Dexie {
   sessions!: Table<LocalSession, string>;
   settings!: Table<Settings, string>;
   cache!: Table<CacheRow, string>;
+  templates!: Table<LocalTemplate, string>;
   constructor() {
     super(isDemo ? 'pulse-demo' : 'pulse'); // demo data never mixes with real data
     this.version(1).stores({ results: 'id, drill_id, created_at, synced', sessions: 'id, created_at, status, synced', settings: 'key' });
     this.version(2).stores({ results: 'id, drill_id, created_at, synced, session_id', sessions: 'id, created_at, status, synced, completed_at', settings: 'key', cache: 'key' });
+    this.version(3).stores({ results: 'id, drill_id, created_at, synced, session_id', sessions: 'id, created_at, status, synced, completed_at', settings: 'key', cache: 'key', templates: 'id, updated_at, synced' });
   }
 }
 export const db = new PulseDB();
@@ -34,7 +40,7 @@ export const db = new PulseDB();
 export const uuid = () => crypto.randomUUID();
 
 export const DEFAULT_SETTINGS: Settings = {
-  key: 'me', real_hcp: null, weekly_goal_min: 180, language: 'de', accent: '#3DFFA2',
+  key: 'me', real_hcp: null, weekly_goal_min: 180, language: 'de', accent: '#9BE3C3',
   results_visibility: 'friends', show_real_hcp: true, hide_last_place_titles: false,
 };
 export async function getSettings(): Promise<Settings> {

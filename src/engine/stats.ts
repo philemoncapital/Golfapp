@@ -71,3 +71,28 @@ export function sessionSummaries(
       };
     });
 }
+
+export interface DayMinutes { date: string; total: number; tee: number; approach: number; short: number; putting: number }
+/** Practice minutes per local calendar day and category for the last `days` days (oldest first). */
+export function dailyMinutes(results: R[], days = 28, now = new Date(), drills: Drill[] = SEED): DayMinutes[] {
+  const key = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const out: DayMinutes[] = [];
+  const byDay = new Map<string, R[]>();
+  for (const r of results) { const k = key(new Date(r.created_at)); byDay.set(k, [...(byDay.get(k) ?? []), r]); }
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(now); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() - i);
+    const rs = byDay.get(key(d)) ?? [];
+    const cat = (c: string) => practiceMinutes(rs.filter((r) => byId(drills, r.drill_id)?.category === c), drills);
+    const row = { date: key(d), tee: cat('tee'), approach: cat('approach'), short: cat('short'), putting: cat('putting'), total: 0 };
+    row.total = row.tee + row.approach + row.short + row.putting;
+    out.push(row);
+  }
+  return out;
+}
+
+/** Practice minutes per category in a window (for the time-share strip). */
+export function minutesByCategory(results: R[], since: Date, drills: Drill[] = SEED): Record<string, number> {
+  const out: Record<string, number> = { tee: 0, approach: 0, short: 0, putting: 0 };
+  for (const c of Object.keys(out)) out[c] = practiceMinutes(results.filter((r) => byId(drills, r.drill_id)?.category === c), drills, since);
+  return out;
+}

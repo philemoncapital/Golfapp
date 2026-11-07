@@ -11,6 +11,7 @@ import type { ResultInput as RI } from '../engine/types';
 import { signal, keepAwake, canVibrate } from '../lib/feedback';
 import { syncNow } from '../lib/sync';
 import { fmtTarget } from './DrillDetail';
+import type { Band, Drill } from '../engine/types';
 import { snapshot, movesAfterSync, type RankMove } from '../lib/rankChange';
 
 const mmss = (s: number) => `${Math.floor(Math.max(0, s) / 60)}:${String(Math.floor(Math.max(0, s) % 60)).padStart(2, '0')}`;
@@ -89,6 +90,7 @@ export default function Live() {
             <button className="btn" onClick={next}>{t('live.skip')}</button>
             <button className="btn primary" disabled={!input} onClick={save}>{t('live.save')}</button>
           </div>
+          <DrillHowTo drill={drill} band={band} />
         </>
       ) : (
         <section className="card stack">
@@ -100,5 +102,22 @@ export default function Live() {
         </section>
       )}
     </>
+  );
+}
+
+/** The drill explained again below the input (setup, goal, procedure, my target), so nobody has to leave the live screen. */
+function DrillHowTo({ drill, band }: { drill: Drill; band: Band | null }) {
+  const { t, i18n } = useTranslation();
+  const text = (i18n.language === 'en' && drill.text.en) || drill.text.de;
+  return (
+    <section className="card stack" aria-label={t('live.howTo')}>
+      <span className="label">{t('live.howTo')}</span>
+      <div className="card" style={{ padding: 8, background: 'var(--surface)' }}><Pictogram drill={drill} /></div>
+      {([['drills.setup', text.setup], ['drills.goal', text.goal], ['drills.procedure', text.procedure]] as const).map(([k, v]) => (
+        <div key={k} className="stack" style={{ gap: 2 }}><b className="small">{t(k)}</b><span className="small text-2">{v}</span></div>
+      ))}
+      {band && <span className="small"><b>{t('live.target')}</b> <span className="text-2">HCP {band.hcp_hi}–{band.hcp_lo}: </span><b className="num">{fmtTarget(band.target)}</b></span>}
+      {drill.equipment_de && <span className="small muted">{drill.equipment_de}</span>}
+    </section>
   );
 }
