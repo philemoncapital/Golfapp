@@ -18,10 +18,10 @@ const de = {
     splitNote: 'Aufteilung vorläufig gleichmäßig, bis die Coaching-Quellen freigegeben sind (Phase 5).',
   },
   live: {
-    remaining: 'Restzeit', drill: 'Übung {{i}} von {{n}}', pause: 'Pause', resume: 'Weiter', skip: 'Überspringen', save: 'Ergebnis speichern',
+    remaining: 'Restzeit', drill: 'Übung {{i}} von {{n}}', pause: 'Pause', resume: 'Weiter', skip: 'Überspringen', save: 'Speichern',
     quick: 'Gesamtwert eingeben', undo: 'Rückgängig', notes: 'Notizen', result: 'Ergebnis', yourHcp: 'Übungs-Handicap', target: 'Ziel deiner Stufe',
     next: 'Nächste Übung', finish: 'Session beenden', done: 'Session beendet', timeUp: 'Zeit ist um', soundHint: 'Ohne Vibration spielt die App einen Ton – Lautlos-Schalter beachten.',
-    howTo: 'So geht’s', yourCircle: 'Dein Kreis', inCircle: 'im Kreis', missedCircle: 'daneben', circleNoHcp: 'Kein echtes Handicap eingetragen – Kreis für HCP 36 angenommen. Im Profil eintragen.', further: 'Weiter', roll: 'Distanz würfeln', nextDist: 'Nächste Distanz', holed: 'Gelocht', green: 'Grün', missed: 'Verfehlt', notFinished: 'Nicht geschafft – Treffer:', minutes: 'Minuten', ball: 'Ball', pos: 'Position',
+    howTo: 'So geht’s', addNote: 'Notiz', yourCircle: 'Dein Kreis', inCircle: 'im Kreis', missedCircle: 'daneben', circleNoHcp: 'Kein echtes Handicap eingetragen – Kreis für HCP 36 angenommen. Im Profil eintragen.', further: 'Weiter', roll: 'Distanz würfeln', nextDist: 'Nächste Distanz', holed: 'Gelocht', green: 'Grün', missed: 'Verfehlt', notFinished: 'Nicht geschafft – Treffer:', minutes: 'Minuten', ball: 'Ball', pos: 'Position',
   },
   profile: {
     title: 'Profil', realHcp: 'Echtes Handicap', goal: 'Wochenziel (Minuten)', language: 'Sprache', accent: 'Akzentfarbe', save: 'Speichern', saved: 'Gespeichert',
@@ -48,10 +48,10 @@ const en: typeof de = {
     splitNote: 'Split is equal for now, until the coaching sources are approved (Phase 5).',
   },
   live: {
-    remaining: 'Time left', drill: 'Drill {{i}} of {{n}}', pause: 'Pause', resume: 'Resume', skip: 'Skip', save: 'Save result',
+    remaining: 'Time left', drill: 'Drill {{i}} of {{n}}', pause: 'Pause', resume: 'Resume', skip: 'Skip', save: 'Save',
     quick: 'Enter total', undo: 'Undo', notes: 'Notes', result: 'Result', yourHcp: 'Drill handicap', target: 'Target for your band',
     next: 'Next drill', finish: 'Finish session', done: 'Session finished', timeUp: 'Time is up', soundHint: 'Without vibration the app plays a sound – check the silent switch.',
-    howTo: 'How it works', yourCircle: 'Your circle', inCircle: 'in the circle', missedCircle: 'missed', circleNoHcp: 'No real handicap set – using the circle for HCP 36. Add it in Profile.', further: 'Further', roll: 'Roll distance', nextDist: 'Next distance', holed: 'Holed', green: 'Green', missed: 'Missed', notFinished: 'Not finished – hits:', minutes: 'minutes', ball: 'Ball', pos: 'Position',
+    howTo: 'How it works', addNote: 'Note', yourCircle: 'Your circle', inCircle: 'in the circle', missedCircle: 'missed', circleNoHcp: 'No real handicap set – using the circle for HCP 36. Add it in Profile.', further: 'Further', roll: 'Roll distance', nextDist: 'Next distance', holed: 'Holed', green: 'Green', missed: 'Missed', notFinished: 'Not finished – hits:', minutes: 'minutes', ball: 'Ball', pos: 'Position',
   },
   profile: {
     title: 'Profile', realHcp: 'Real handicap', goal: 'Weekly goal (minutes)', language: 'Language', accent: 'Accent colour', save: 'Save', saved: 'Saved',
