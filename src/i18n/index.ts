@@ -172,7 +172,7 @@ const de3 = {
     regular: { name: 'Stammgast', crit: 'Verschiedene Tage mit Session oder Ergebnis: 10 / 30 / 100' },
     goal_getter: { name: 'Zielstrebig', crit: 'Wochen in Folge mit erreichtem Wochenziel: 2 / 4 / 8' },
     pb_machine: { name: 'Rekordjäger', crit: 'Aufgestellte Bestleistungen: 5 / 20 / 50' },
-    round_logger: { name: 'Rundenbuchhalter', crit: 'Eingetragene echte Runden: 5 / 15 / 40' },
+    round_logger: { name: 'Runden\u00ADbuch\u00ADhalter', crit: 'Eingetragene echte Runden: 5 / 15 / 40' },
     first_tee: { name: 'Erster Abschlag', crit: 'Erste Session abgeschlossen' },
     flawless: { name: 'Makellos', crit: 'Maximale Punktzahl in einer Übung erreicht – je Übung wiederholbar' },
     complete_set: { name: 'Komplettes Set', crit: 'Jede Übung aus dem Heft mindestens einmal gespielt' },

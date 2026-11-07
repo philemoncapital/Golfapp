@@ -7,23 +7,25 @@ import { loadMyAchievements } from '../lib/achievements';
 import { ACH_DEFS, progressOf, type AchDef, type AchRow } from '../engine/achievements';
 import { drillById } from '../lib/drills';
 import { fmtDate } from '../lib/format';
-import { Badge, BADGE_COLORS, type Tier } from '../components/Badge';
+import { Badge, BADGE_METAL, type Tier } from '../components/Badge';
 import { StaleHint, Empty } from '../components/Ui';
 import { supabase } from '../lib/supabase';
 import { isDemo } from '../lib/demo';
 
+const TIERS: Tier[] = ['bronze', 'silver', 'gold'];
 const NEXT_TIER: Record<string, Tier | undefined> = { none: 'bronze', bronze: 'silver', silver: 'gold' };
+const titleTypeOf = (key: string) => (key.endsWith('_last') ? 'last' : 'leader') as 'leader' | 'last';
+const metalKey = (def: AchDef, r?: AchRow) => (!r?.earned_at ? 'locked' : def.kind === 'medal' ? (r.tier ?? 'locked') : def.kind === 'title_badge' ? titleTypeOf(def.key) : 'achievement');
 
-/** The big number under a badge: counter for medals, weeks for titles, value/target or ✓ for achievements. */
-export function badgeNumber(def: AchDef, r?: AchRow): string {
-  const p = r?.progress ?? {};
-  if (def.kind === 'medal') return String(Number(p.value ?? 0));
-  if (def.kind === 'title_badge') return r?.earned_at ? String(Number(p.weeks ?? 0)) : '–';
-  if (def.key === 'flawless') return String(Number(p.value ?? 0));
+/** Number overlapping the badge: counter for medals / Flawless / items with a target, weeks for titles. null = no number. */
+export function badgeNumber(def: AchDef, r?: AchRow): string | null {
+  if (!r?.earned_at) return null;
+  const p = r.progress ?? {};
+  if (def.kind === 'medal' || def.key === 'flawless') return String(Number(p.value ?? 0));
+  if (def.kind === 'title_badge') return String(Number(p.weeks ?? 0));
   if (p.target != null) return String(Number(p.value ?? 0));
-  return r?.earned_at ? '✓' : '–';
+  return null;
 }
-const colorOf = (def: AchDef, r?: AchRow) => BADGE_COLORS[!r?.earned_at ? 'locked' : def.kind === 'medal' ? (r.tier ?? 'locked') : def.kind === 'title_badge' ? (def.key.endsWith('_last') ? 'last' : 'leader') : 'achievement'][0];
 
 export default function Achievements() {
   const { t } = useTranslation();
@@ -41,72 +43,94 @@ export default function Achievements() {
       {!isDemo && (!supabase || user === null) ? <Empty text={t('achv.signedOut')} link={supabase ? { to: '/profile', label: t('auth.signIn') } : undefined} /> : (
         <>
           <StaleHint r={data} />
-          {sections.map(([label, kind]) => (
-            <section key={kind} className="stack" aria-label={t(label)}>
-              <span className="label">{t(label)}</span>
-              <div className="ach-grid">
-                {ACH_DEFS.filter((d) => d.kind === kind).map((d) => {
-                  const r = rows.get(d.key);
-                  const locked = !r?.earned_at;
-                  const name = t(`ach.${d.key}.name`);
-                  return (
-                    <button key={d.key} className={`ach-cell ${locked ? 'locked' : ''}`} onClick={() => setOpen(d)} aria-label={`${name}${locked ? ` – ${t('achv.locked')}` : ''}`}>
-                      <Badge k={d.key} kind={d.kind} tier={r?.tier} titleType={d.key.endsWith('_last') ? 'last' : 'leader'} locked={locked} size={78} label={name} />
-                      <span className="ach-num num">{badgeNumber(d, r)}</span>
-                      <span className="ach-name">{name}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
+          {sections.map(([label, kind]) => {
+            const defs = ACH_DEFS.filter((d) => d.kind === kind).sort((a, b) => Number(!rows.get(a.key)?.earned_at) - Number(!rows.get(b.key)?.earned_at));
+            return (
+              <section key={kind} className="stack" aria-label={t(label)}>
+                <span className="label">{t(label)}</span>
+                <div className="ach-grid">
+                  {defs.map((d) => {
+                    const r = rows.get(d.key);
+                    const locked = !r?.earned_at;
+                    const name = t(`ach.${d.key}.name`);
+                    const num = badgeNumber(d, r);
+                    return (
+                      <button key={d.key} className={`ach-cell ${locked ? 'locked' : ''}`} onClick={() => setOpen(d)} aria-label={`${name}${locked ? ` – ${t('achv.locked')}` : ''}`}>
+                        <Badge k={d.key} kind={d.kind} tier={r?.tier} titleType={titleTypeOf(d.key)} locked={locked} size={92} label={name}
+                          pill={locked ? 'lock' : num === null ? 'check' : undefined} />
+                        {num !== null && <span className="ach-num num">{num}</span>}
+                        <span className="ach-name" style={{ marginTop: num === null ? 6 : 0 }}>{name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
         </>
       )}
     </>
   );
 }
 
-/** Full-screen detail in the style of the reference: glow, big badge, big number, criterion, milestone strip. */
+/** Full-screen detail: glow wash, badge + overlapping number, criterion, milestone card, tier timeline. */
 function Detail({ def, row, onClose }: { def: AchDef; row?: AchRow; onClose: () => void }) {
   const { t, i18n } = useTranslation();
   const name = t(`ach.${def.key}.name`);
   const p = row?.progress ?? {};
   const locked = !row?.earned_at;
   const pr = progressOf(def, row);
-  const glow = colorOf(def, row);
-  const first = def.kind === 'medal' && row?.tier ? (p.tier_dates as Record<string, string> | undefined)?.bronze ?? row.earned_at : row?.earned_at;
+  const metal = BADGE_METAL[metalKey(def, row)];
+  const num = badgeNumber(def, row);
+  const tierDates = (p.tier_dates as Record<string, string> | undefined) ?? {};
+  const first = def.kind === 'medal' && row?.tier ? tierDates.bronze ?? row.earned_at : row?.earned_at;
   const nextTier = def.kind === 'medal' ? NEXT_TIER[row?.tier ?? 'none'] : undefined;
-  const tt = def.key.endsWith('_last') ? 'last' : 'leader';
+  const tt = titleTypeOf(def.key);
+  const showMilestone = pr && (pr[0] < pr[1] || !!nextTier);
+  const d = (iso: string) => fmtDate(iso, i18n.language, { day: 'numeric', month: 'short', year: 'numeric' });
   return (
-    <div className="ach-detail" style={{ ['--glow' as string]: glow }}>
-      <div className="row between"><button className="linkbtn" onClick={onClose} aria-label={t('achv.close')}>‹ {t('achv.title')}</button><span className="label">{t('achv.details')}</span><span style={{ width: 60 }} /></div>
-      <div className="stack" style={{ alignItems: 'center', gap: 6, marginTop: 12 }}>
-        <Badge k={def.key} kind={def.kind} tier={row?.tier} titleType={tt} locked={locked} size={210} label={name} />
-        <span className="ach-big num">{badgeNumber(def, row)}</span>
-        <h2 style={{ fontSize: 22 }}>{name}{row?.tier ? ` · ${t(`tier.${row.tier}`)}` : ''}</h2>
+    <div className="ach-detail" style={{ ['--glow' as string]: metal[1] }}>
+      <div className="ach-head"><button className="linkbtn" onClick={onClose} aria-label={t('achv.close')}>‹ {t('achv.title')}</button><span className="label">{t('achv.details')}</span><span /></div>
+      <div className="stack" style={{ alignItems: 'center', gap: 6, marginTop: 4 }}>
+        <Badge k={def.key} kind={def.kind} tier={row?.tier} titleType={tt} locked={locked} size={220} label={name} pill={locked ? 'lock' : undefined} />
+        {num !== null ? <span className="ach-big num">{num}</span> : <span style={{ height: 8 }} />}
+        <h2 style={{ fontSize: 22, textAlign: 'center' }}>{name}{row?.tier ? ` · ${t(`tier.${row.tier}`)}` : ''}</h2>
         <span className="text-2 small" style={{ textAlign: 'center', maxWidth: 300 }}>{t(`ach.${def.key}.crit`)}</span>
-        <span className="small muted">{row?.earned_at ? t('achv.earned', { date: fmtDate(first ?? row.earned_at, i18n.language, { day: 'numeric', month: 'long', year: 'numeric' }) }) : t('achv.locked')}</span>
+        <span className="small muted">{row?.earned_at ? t('achv.earned', { date: d(first ?? row.earned_at) }) : t('achv.locked')}</span>
         {def.key === 'flawless' && Array.isArray(p.drills) && p.drills.length > 0 && (
           <span className="small text-2" style={{ textAlign: 'center' }}>{t('achv.drillsDone', { list: (p.drills as string[]).map((id) => drillById(id)?.title ?? id).join(', ') })}</span>
         )}
-        {def.kind === 'title_badge' && row?.earned_at && <span className="small text-2">{t('achv.weeks', { n: Number(p.weeks ?? 0) })}{p.holding ? ` · ${t('achv.holding')}` : ''}</span>}
+        {def.kind === 'title_badge' && row?.earned_at && p.holding ? <span className="small text-2">{t('achv.holding')}</span> : null}
         {Boolean(p.needs_hcp) && <Link to="/profile" className="small">{t('achv.needsHcp')}</Link>}
       </div>
-      {pr && (
+
+      {showMilestone && pr && (
         <div className="card milestone">
-          <div className="stack" style={{ alignItems: 'center', gap: 2 }}>
-            <Badge k={def.key} kind={def.kind} tier={row?.tier} titleType={tt} locked={locked} size={58} label={name} />
+          <div className="ms-badge">
+            <Badge k={def.key} kind={def.kind} tier={row?.tier} titleType={tt} locked={locked} size={64} label={name} />
             <b className="num">{pr[0]}</b>
           </div>
-          <div className="stack" style={{ flex: 1, gap: 6, alignItems: 'center' }}>
-            <span className="small" style={{ fontWeight: 600 }}>{t('achv.more', { n: Math.max(0, pr[1] - pr[0]) })}</span>
-            <span className="bar" style={{ width: '100%' }}><span style={{ width: `${Math.min(100, (pr[0] / pr[1]) * 100)}%`, background: `linear-gradient(90deg, ${glow}, var(--accent-2))` }} /></span>
+          <div className="stack" style={{ flex: 1, gap: 6, alignItems: 'center', textAlign: 'center' }}>
+            <span className="small" style={{ fontWeight: 700 }}>{t('achv.more', { n: Math.max(0, pr[1] - pr[0]) })}</span>
+            <span className="bar" style={{ width: '100%' }}><span style={{ width: `${Math.min(100, (pr[0] / pr[1]) * 100)}%`, background: `linear-gradient(90deg, ${metal[1]}, ${metal[3]})` }} /></span>
             <span className="small muted">{t('achv.nextMilestone')}</span>
           </div>
-          <div className="stack" style={{ alignItems: 'center', gap: 2, opacity: 0.6 }}>
-            <Badge k={def.key} kind={def.kind} tier={nextTier ?? row?.tier} titleType={tt} locked={!nextTier && def.kind === 'medal'} size={58} label={name} />
+          <div className="ms-badge" style={{ filter: 'grayscale(.7) brightness(.8)' }}>
+            <Badge k={def.key} kind={def.kind} tier={nextTier ?? row?.tier} titleType={tt} size={64} label={name} pill="lock" />
             <b className="num">{pr[1]}</b>
           </div>
+        </div>
+      )}
+
+      {def.kind === 'medal' && (
+        <div className="row" style={{ justifyContent: 'center', gap: 18 }}>
+          {TIERS.map((tier) => (
+            <div key={tier} className="stack" style={{ alignItems: 'center', gap: 2, opacity: tierDates[tier] ? 1 : 0.45 }}>
+              <Badge k={def.key} kind="medal" tier={tier} locked={!tierDates[tier]} size={44} label={t(`tier.${tier}`)} />
+              <span className="small" style={{ fontWeight: 600 }}>{t(`tier.${tier}`)}</span>
+              <span className="small muted">{tierDates[tier] ? d(tierDates[tier]) : '–'}</span>
+            </div>
+          ))}
         </div>
       )}
     </div>
