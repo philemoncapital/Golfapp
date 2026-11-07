@@ -348,4 +348,64 @@ export const SCENES: Record<string, Scene> = {
     <Dim x1={160} x2={216} y={84} label="90 cm" ctx={c} />
     <Tag x={268} y={130} ctx={c}>leichter Break</Tag><Tag x={262} y={186} ctx={c}>Serie zählen</Tag>
   </>,
+
+  // ---------------- Approach (Phase 5, approved 2026-11-07) ----------------
+  'donald-wedge-ladder': (id, c) => {
+    const ys = Array.from({ length: 10 }, (_, i) => 104 + i * 9.4);
+    return <>
+      <Range id={id} />
+      <Green id={id} cx={160} cy={40} rx={58} ry={24} />
+      <Ring x={160} y={36} r={26} strong /><Flag x={160} y={38} h={24} />
+      <line x1={150} y1={ys[0]} x2={150} y2={ys[9]} stroke="rgba(242,243,245,0.25)" /><line x1={170} y1={ys[0]} x2={170} y2={ys[9]} stroke="rgba(242,243,245,0.25)" />
+      {ys.map((y, i) => <g key={i}><line x1={150} y1={y} x2={170} y2={y} stroke={i === 0 ? 'var(--accent)' : 'rgba(242,243,245,0.35)'} strokeWidth={i === 0 ? 2 : 1.2} /></g>)}
+      <Station x={136} y={ys[0]} n={1} ctx={c} r={7} /><Station x={136} y={ys[9]} n={10} ctx={c} r={7} />
+      <Ball x={180} y={ys[0]} r={3} /><Ball x={187} y={ys[0]} r={3} /><Ball x={194} y={ys[0]} r={3} />
+      <Flight from={[160, ys[0] - 4]} to={[158, 44]} bend={-14} id={id} />
+      <Dim x1={214} x2={214} y={ys[0]} y2={ys[9]} vertical label="69–93 m" ctx={c} />
+      <Tag x={238} y={36} ctx={c}>Radius je HCP</Tag><Tag x={70} y={150} ctx={c}>+3 yd je Station</Tag><Tag x={70} y={186} ctx={c}>3 Bälle × 10</Tag>
+    </>;
+  },
+  'random-yardage': (id, c) => {
+    const flags: [number, number][] = [[92, 70], [186, 40], [240, 84], [138, 98]];
+    return <>
+      <Range id={id} />
+      <rect x={16} y={24} width={288} height={90} rx="10" fill="rgba(155,227,195,0.06)" stroke="var(--accent)" strokeOpacity="0.35" strokeDasharray="6 5" />
+      {flags.map(([x, y], i) => <g key={i}><Green id={id} cx={x} cy={y} rx={18} ry={10} />{i === 1 && <Ring x={x} y={y - 2} r={20} strong />}<Flag x={x} y={y} h={20} color={i === 1 ? 'var(--accent)' : COL.neutral} /></g>)}
+      <TeeBall x={160} y={184} ctx={c} />
+      <Flight from={[160, 180]} to={[184, 42]} bend={12} id={id} />
+      <Flight from={[160, 180]} to={[96, 72]} bend={-10} muted id={id} />
+      <g transform="translate(36,148)">
+        <rect width="30" height="30" rx="7" fill="#F4F5F7" stroke="rgba(0,0,0,0.4)" />
+        {[[8, 8], [22, 8], [15, 15], [8, 22], [22, 22]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r="2.6" fill="#0A0B0D" />)}
+      </g>
+      <Tag x={262} y={20} ctx={c}>115–137 m</Tag><Tag x={92} y={190} ctx={c}>neue Distanz je Ball</Tag><Tag x={262} y={186} ctx={c}>10 Bälle</Tag>
+    </>;
+  },
+  pinseeker: (id, c) => {
+    const shots: [number, number][] = [[156, 50], [172, 40], [140, 62], [190, 58], [126, 30], [168, 76], [204, 34], [110, 70], [214, 84], [150, 90]];
+    return <>
+      <Range id={id} />
+      <Green id={id} cx={160} cy={50} rx={46} ry={24} />
+      <Ring x={160} y={50} r={52} /><Ring x={160} y={50} r={24} strong />
+      <Flag x={160} y={52} h={24} />
+      {shots.map(([x, y], i) => <Ball key={i} x={x} y={y} r={3} />)}
+      <TeeBall x={160} y={184} ctx={c} />
+      <Flight from={[160, 180]} to={[156, 54]} bend={-12} id={id} />
+      <Dim x1={262} x2={262} y={180} y2={52} vertical label="120 m" ctx={c} />
+      <Pts x={200} y={20} v="+2" ctx={c} at={[176, 38]} /><Pts x={238} y={46} v="+1" ctx={c} at={[210, 56]} /><Pts x={212} y={112} v="0" ctx={c} weak />
+      <Tag x={60} y={120} ctx={c}>12 m · 24 m</Tag><Tag x={70} y={186} ctx={c}>10 Bälle · 1 Fahne</Tag>
+    </>;
+  },
+  'ten-shot-drill': (id, c) => {
+    const tg = Array.from({ length: 10 }, (_, i) => { const a = 160 - i * 15.5; const r = 70 + i * 9; return pol(160, 190, r, a); });
+    return <>
+      <Range id={id} />
+      {tg.map(([x, y], i) => <g key={i}>{i === 6 && <Ring x={x} y={y} r={13} strong />}<Flag x={x} y={y} h={16} color={i === 6 ? 'var(--accent)' : COL.neutral} />{!c.sm && <text x={x + 8} y={y + 10} fontSize="8.5" fontWeight="700" fill="var(--text-2)">{i + 1}</text>}</g>)}
+      <TeeBall x={160} y={188} ctx={c} />
+      <Flight from={[160, 184]} to={tg[6][0] < 160 ? [tg[6][0] + 2, tg[6][1] + 2] : [tg[6][0] - 2, tg[6][1] + 2]} bend={8} id={id} />
+      {[0, 1, 2, 3, 4].map((k) => <Club key={k} x={34} y={150 + k * 8} len={34} angle={-6 + k * 3} />)}
+      <Count x={236} y={164} v="1" ctx={c} /><Count x={266} y={164} v="2" ctx={c} /><Count x={296} y={164} v="3" ctx={c} />
+      <Tag x={266} y={188} ctx={c}>niedrig = gut</Tag><Tag x={60} y={192} ctx={c}>10 Ziele · 10 Schläger</Tag><Tag x={160} y={20} ctx={c}>60–132 m</Tag>
+    </>;
+  },
 };

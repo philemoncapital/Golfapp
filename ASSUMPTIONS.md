@@ -69,3 +69,12 @@ Everything the app computes that is not stated in the drill booklet is listed he
 - Home "Zeit · 4 Wochen" and the 4-week chart use the same practice-minutes rule as everywhere else (drill duration once per session).
 - Saved sessions sync last-write-wins by `updated_at`; deletes are soft so other devices learn about them.
 - Pictograms are schematic and not to scale; distances are written on tags.
+
+## Approach drills (Phase 5, approved 7 Nov 2026)
+- Four drills added under Approach: Wedge Ladder (Luke Donald), Random Yardage (Justin Thomas), Pinseeker, 10-Shot Drill (Karl Morris). The procedures follow the verified sources (docs/PHASE5_PROPOSAL.md, 0a). A4 (Approach-Iron Skill Test) was not added: too strongly adapted.
+- None of the sources gives handicap benchmarks. All HCP tables are **our assumption**, derived from Arccos proximity-by-handicap data (D1/D3, verified) and Shot Scope data (D2, not verifiable), with a Rayleigh spread assumption. Shown in the app as "scoring and HCP targets are our assumption".
+- Radius drills: band met when half the balls finish inside the band radius (15 of 30, 5 of 10) – an assumption like Attack the Flag.
+- Random Yardage: the app rolls a distance between 115 and 137 m before each ball (instead of a launch monitor), never the same twice in a row.
+- 10-Shot Drill: 1 = good (within 10 % of the distance), 2 = good enough (within 20 %), 3 = poor; lower total is better. Distances 60–132 m and the 10 %/20 % limits are our adaptation; the source only defines Good / Good Enough / Poor.
+- Pinseeker: solo version of a two-player game; zones 10 %/20 % of the distance instead of "5 or 10 feet, your call".
+- Collector (achievement) now requires the 4 approach drills as well; Complete Set stays booklet-only.

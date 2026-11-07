@@ -4,11 +4,11 @@
  * Run: npm run gen:hcp-vectors
  */
 import { writeFileSync } from 'node:fs';
-import seed from '../src/data/drills.seed.json';
+import { ALL_DRILLS } from '../src/data/allDrills';
 import { resultHcp } from '../src/engine/handicap';
 import type { Drill, ResultInput, RadiusBall } from '../src/engine/types';
 
-const drills = seed as unknown as Drill[];
+const drills = ALL_DRILLS;
 let s = 42; const rnd = () => ((s = (s * 1103515245 + 12345) % 2147483648) / 2147483648);
 const rows: [string, ResultInput, number][] = [];
 const BUCKETS: RadiusBall[] = [0, 1.4, 1.9, 2.9, 3.9, 4.9, 5.9, 6.9].map((d) => ({ dist_m: d, on_green: true }))
@@ -22,7 +22,8 @@ for (const d of drills) {
     for (let k = 0; k < 120; k++) {
       const len = k < 100 ? n : 1 + Math.floor(rnd() * n);
       const bias = rnd();
-      add({ kind: 'radius', balls: Array.from({ length: len }, () => BUCKETS[Math.min(9, Math.floor(rnd() * 10 * (0.3 + bias)))]) });
+      const bk: RadiusBall[] = sc.buckets ? [...sc.buckets.map((b) => ({ dist_m: b - 0.1, on_green: true })), { dist_m: null, on_green: false }] : BUCKETS;
+      add({ kind: 'radius', balls: Array.from({ length: len }, () => bk[Math.min(bk.length - 1, Math.floor(rnd() * bk.length * (0.3 + bias)))]) });
     }
   } else if (sc.type === 'series_triplet') {
     for (let a = 0; a <= 12; a++) for (let b = 0; b <= 6; b++) for (let c = 0; c <= 3; c++) add({ kind: 'triplet', achieved: [a, b, c] });

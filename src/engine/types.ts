@@ -17,6 +17,10 @@ export interface Scoring {
   pass_hits?: number;
   pass_assumed?: boolean;
   result_is_putts?: boolean;
+  /** radius drills: distance buckets in metres offered as buttons (default: short-game buckets) */
+  buckets?: number[];
+  /** drills with a random target distance per ball: [min, max] in metres */
+  random_m?: [number, number];
   bands: Band[];
 }
 
@@ -34,6 +38,8 @@ export interface Drill {
   text: { de: DrillText; en: DrillText | null };
   scoring: Scoring;
   needs_verification: string | null;
+  /** cited sources (approach drills, PROMPT.md 4.2) */
+  sources?: { title: string; author: string; date: string; url: string }[];
 }
 export interface DrillText { setup: string; goal: string; procedure: string; scoring_note: string }
 

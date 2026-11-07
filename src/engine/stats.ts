@@ -1,8 +1,8 @@
 import type { Drill, DrillResult } from './types';
 import { resultHcp } from './handicap';
-import seed from '../data/drills.seed.json';
+import { ALL_DRILLS } from '../data/allDrills';
 
-const SEED = seed as unknown as Drill[];
+const SEED = ALL_DRILLS;
 const byId = (drills: Drill[], id: string) => drills.find((d) => d.id === id);
 type R = DrillResult & { session_id?: string | null; drill_hcp?: number | null; id?: string };
 

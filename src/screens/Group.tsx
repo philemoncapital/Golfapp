@@ -6,11 +6,11 @@ import { useRemote } from '../lib/useRemote';
 import { useUser } from '../lib/auth';
 import { drillById } from '../lib/drills';
 import { fmtDate, fmtHcp } from '../lib/format';
-import { TitleIcon, type TitleBoard } from '../components/TitleIcon';
+import { TitleIcon } from '../components/TitleIcon';
+import { Leaderboard } from '../components/Leaderboard';
 import { StaleHint, Empty } from '../components/Ui';
 import { SocialGate, useErrorText } from './Social';
 
-const BOARDS: Board[] = ['overall', 'tee', 'approach', 'short', 'putting', 'activity'];
 
 export default function Group() {
   const { id = '' } = useParams();
@@ -31,53 +31,14 @@ export default function Group() {
 
 function GroupBody({ g, reloadGroups }: { g: MyGroup; reloadGroups: () => void }) {
   const { t, i18n } = useTranslation();
-  const [board, setBoard] = useState<Board>('overall');
-  const rows = useRemote<BoardRow[]>(`board:${g.group_id}:${board}`, () => api.leaderboard(g.group_id, board), [board]);
   const titles = useRemote<Title[]>(`titles:${g.group_id}`, () => api.titles(g.group_id));
   const feed = useRemote<FeedItem[]>(`feed:${g.group_id}`, () => api.feed(g.group_id));
   const members = useRemote<Member[]>(`members:${g.group_id}`, () => api.members(g.group_id));
   const nameOf = (uid: string) => members.value?.find((m) => m.user_id === uid)?.display_name ?? '…';
-  const ranked = (rows.value ?? []).filter((r) => r.eligible);
-  const unranked = (rows.value ?? []).filter((r) => !r.eligible);
-  const fmtVal = (r: BoardRow) => (board === 'activity' ? `${r.value ?? 0} ${t('common.min')}` : fmtHcp(r.value));
-  const rule = board === 'activity' ? t('group.activityRule') : board === 'overall' ? t('group.eligibilityOverall') : t('group.eligibility');
 
   return (
     <>
-      <section className="card stack" aria-label={t('group.leaderboard')}>
-        <div className="row between"><span className="label">{t('group.leaderboard')}</span><span className="small muted">{t('group.last30')}</span></div>
-        <div className="scroll-x" role="tablist">
-          {BOARDS.map((b) => <button key={b} role="tab" className="chip" aria-selected={board === b} aria-pressed={board === b} onClick={() => setBoard(b)}>{t(`board.${b}`)}</button>)}
-        </div>
-        <StaleHint r={rows} />
-        {ranked.length === 0 && !rows.loading && <Empty text={rule} />}
-        <ol className="list">
-          {ranked.map((r) => (
-            <li key={r.user_id} className="row between">
-              <span className="row" style={{ gap: 8 }}>
-                <span className="rank">{r.rank}</span>
-                <span className={r.is_me ? 'me' : undefined} style={{ fontWeight: r.is_me ? 600 : 400 }}>{r.is_me ? t('common.you') : r.display_name}</span>
-                {r.title && board !== 'activity' && <TitleIcon board={board as TitleBoard} type={r.title} size={22} label={false} />}
-              </span>
-              <b className="num">{fmtVal(r)}</b>
-            </li>
-          ))}
-        </ol>
-        {unranked.length > 0 && (
-          <>
-            <span className="label">{t('group.notRanked')}</span>
-            <span className="small muted">{rule}</span>
-            <ul className="list">
-              {unranked.map((r) => (
-                <li key={r.user_id} className="row between text-2">
-                  <span className={r.is_me ? 'me' : undefined}>{r.is_me ? t('common.you') : r.display_name}</span>
-                  {board !== 'activity' && <span className="small muted num">{r.n_results} / {r.n_drills}</span>}
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </section>
+      <Leaderboard groupId={g.group_id} />
 
       <section className="card stack" aria-label={t('group.titles')}>
         <span className="label">{t('group.titles')}</span>

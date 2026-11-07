@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { onUnlock } from '../lib/achievements';
 import { signal } from '../lib/feedback';
-import { AchIcon } from './AchIcon';
+import { Badge } from './Badge';
+import { ACH_DEFS } from '../engine/achievements';
 import type { AchRow } from '../engine/achievements';
 
 /** Short, non-blocking toast per unlock (8.5) with the vibration / cup sound from 9.3. */
@@ -21,7 +22,7 @@ export function UnlockToasts() {
   const name = t(`ach.${r.key}.name`);
   return (
     <Link to="/achievements" className="toast row" role="status" aria-live="polite" style={{ textDecoration: 'none', color: 'var(--text)' }}>
-      <AchIcon k={r.key} tier={r.tier} size={36} label={name} />
+      <Badge k={r.key} kind={ACH_DEFS.find((d) => d.key === r.key)?.kind ?? 'achievement'} tier={r.tier} titleType={r.key.endsWith('_last') ? 'last' : 'leader'} size={40} label={name} />
       <span>{r.tier ? t('achv.tierUp', { name, tier: t(`tier.${r.tier}`) }) : t('achv.unlocked', { name })}</span>
     </Link>
   );

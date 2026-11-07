@@ -7,7 +7,7 @@ export function ResultInput({ drill, onChange, elapsedMin }: { drill: Drill; onC
   const s = drill.scoring;
   switch (s.type) {
     case 'points_per_ball': return <PerBall drill={drill} onChange={onChange} />;
-    case 'radius_by_band': return <Radius total={s.balls ?? 20} onChange={onChange} />;
+    case 'radius_by_band': return <Radius total={s.balls ?? 20} buckets={s.buckets} onChange={onChange} />;
     case 'series_triplet': return <Triplet onChange={onChange} />;
     case 'time_lower_better': return <Timed elapsedMin={elapsedMin} limit={drill.duration_min} onChange={onChange} />;
     default: return <Stepper onChange={onChange} />;
@@ -45,7 +45,7 @@ function PerBall({ drill, onChange }: { drill: Drill; onChange: (r: RI | null) =
       <div className={buttons.length >= 4 ? 'grid4' : 'grid3'}>
         {buttons.map((b, i) => (
           <button key={b} className={`btn big ${i === 0 ? 'primary' : ''}`} onClick={() => update([...taps, b])}>
-            {b > 0 ? `+${b}` : b}
+            {drill.scoring.lower_is_better && !putts ? b : b > 0 ? `+${b}` : b}
           </button>
         ))}
       </div>
@@ -65,17 +65,19 @@ const BUCKETS: { key: string; ball: RadiusBall }[] = [
   { key: '<7', ball: { dist_m: 6.9, on_green: true } }, { key: 'green', ball: { dist_m: 8, on_green: true } },
   { key: 'missed', ball: { dist_m: null, on_green: false } },
 ];
-function Radius({ total, onChange }: { total: number; onChange: (r: RI | null) => void }) {
+function Radius({ total, buckets, onChange }: { total: number; buckets?: number[]; onChange: (r: RI | null) => void }) {
   const { t } = useTranslation();
   const [balls, setBalls] = useState<RadiusBall[]>([]);
   const update = (b: RadiusBall[]) => { setBalls(b); onChange(b.length ? { kind: 'radius', balls: b } : null); };
-  const name = (k: string) => (k === 'holed' ? t('live.holed') : k === 'green' ? t('live.green') : k === 'missed' ? t('live.missed') : `${k} m`);
+  const name = (k: string) => (k === 'holed' ? t('live.holed') : k === 'green' ? t('live.green') : k === 'missed' ? (buckets ? t('live.further') : t('live.missed')) : `${k} m`);
+  // Approach drills bring their own distance buckets (metres to the flag); short-game drills use the default set.
+  const list = buckets ? [...buckets.map((b) => ({ key: `<${b}`, ball: { dist_m: b - 0.1, on_green: true } })), { key: 'missed', ball: { dist_m: null, on_green: false } }] : BUCKETS;
   return (
     <div className="stack">
       <div className="row between"><span className="label">{t('live.ball')} {Math.min(balls.length + 1, total)} / {total}</span>
         <button className="btn" onClick={() => update(balls.slice(0, -1))} disabled={!balls.length}>{t('live.undo')}</button></div>
       <div className="grid4">
-        {BUCKETS.map((b) => <button key={b.key} className="btn" style={{ minHeight: 56 }} disabled={balls.length >= total} onClick={() => update([...balls, b.ball])}>{name(b.key)}</button>)}
+        {list.map((b) => <button key={b.key} className="btn" style={{ minHeight: 56 }} disabled={balls.length >= total} onClick={() => update([...balls, b.ball])}>{name(b.key)}</button>)}
       </div>
     </div>
   );

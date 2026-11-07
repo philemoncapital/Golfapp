@@ -10,7 +10,8 @@
     "test": "vitest run",
     "seed:drills": "node scripts/import-drills.mjs && node scripts/seed-sql.mjs",
     "test:db": "bash scripts/db-test.sh",
-    "gen:hcp-vectors": "vite-node scripts/gen-hcp-vectors.ts"
+    "gen:hcp-vectors": "vite-node scripts/gen-hcp-vectors.ts",
+    "gen:approach-sql": "vite-node scripts/gen-approach-sql.ts"
   },
   "dependencies": {
     "@fontsource/inter": "^5.1.0",
