@@ -41,6 +41,7 @@ export default function App() {
   const n = plan?.drill_ids.length ?? 0;
   const { pathname } = useLocation();
   const socialActive = /^\/(groups|friends)\//.test(pathname);
+  const live = pathname === '/live'; // full-screen live mode: no tab bar, more room for the score input
 
   return (
     <div className="app">
@@ -50,7 +51,7 @@ export default function App() {
           <button className="btn" onClick={() => setDemo(false)}>{t('demo.exit')}</button>
         </div>
       )}
-      <main className="main">
+      <main className={`main ${live ? "main-live" : ""}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/sessions/:id" element={<SessionDetail />} />
@@ -67,7 +68,7 @@ export default function App() {
         </Routes>
       </main>
       <UnlockToasts />
-      <nav className="nav" aria-label="Main">
+      {!live && <nav className="nav" aria-label="Main">
         <ul>
           {(['today', 'drills', 'session', 'social', 'profile'] as const).map((k) => (
             <li key={k}>
@@ -79,7 +80,7 @@ export default function App() {
             </li>
           ))}
         </ul>
-      </nav>
+      </nav>}
     </div>
   );
 }

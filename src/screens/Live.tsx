@@ -29,6 +29,7 @@ export default function Live() {
   const [now, setNow] = useState(Date.now());
   const [input, setInput] = useState<RI | null>(null);
   const [notes, setNotes] = useState('');
+  const [showNotes, setShowNotes] = useState(false);
   const [summary, setSummary] = useState<{ hcp: number } | null>(null);
   const [moves, setMoves] = useState<RankMove[]>([]);
   const signalled = useRef(false);
@@ -56,7 +57,7 @@ export default function Live() {
     void movesAfterSync(before, drill.category).then(setMoves);
   };
   const next = async () => {
-    setSummary(null); setInput(null); setNotes(''); signalled.current = false;
+    setSummary(null); setInput(null); setNotes(''); setShowNotes(false); signalled.current = false;
     if (idx + 1 < n) { setIdx(idx + 1); setStartedAt(Date.now()); setPausedAt(null); return; }
     await db.sessions.update(session.id, { status: 'completed', completed_at: new Date().toISOString(), synced: 0 });
     void syncNow();
@@ -69,30 +70,38 @@ export default function Live() {
 
   return (
     <>
-      <div className="row between">
-        <span className="label">{t('live.drill', { i: idx + 1, n })}</span>
-        <button className="btn" onClick={togglePause}>{pausedAt ? t('live.resume') : t('live.pause')}</button>
+      {/* compact header: drill, time left, pause – so the score input fits on one phone screen without scrolling */}
+      <div className="live-head">
+        <div className="stack" style={{ gap: 0, minWidth: 0 }}>
+          <span className="label">{t('live.drill', { i: idx + 1, n })}</span>
+          <h2 className="ellipsis" style={{ fontSize: 19 }}>{drill.title}</h2>
+        </div>
+        <div className="row" style={{ gap: 8, flexShrink: 0 }}>
+          <span className="live-timer num" style={{ color: remaining <= 0 ? 'var(--weak)' : undefined }} aria-label={remaining <= 0 ? t('live.timeUp') : t('live.remaining')}>{mmss(remaining)}</span>
+          <button className="btn icon" onClick={togglePause} aria-label={pausedAt ? t('live.resume') : t('live.pause')}>{pausedAt ? '▶' : '❚❚'}</button>
+        </div>
       </div>
-      <h1>{drill.title}</h1>
-      <div className="row between" style={{ alignItems: 'flex-end' }}>
-        <span className="big" style={{ fontSize: 72, color: remaining <= 0 ? 'var(--weak)' : undefined }} aria-live="off">{mmss(remaining)}</span>
-        <span className="small muted" style={{ paddingBottom: 8 }}>{remaining <= 0 ? t('live.timeUp') : t('live.remaining')}</span>
-      </div>
-      <div className="bar"><span style={{ width: `${Math.min(100, (elapsed / (drill.duration_min * 60)) * 100)}%` }} /></div>
+      <div className="bar" style={{ height: 4 }}><span style={{ width: `${Math.min(100, (elapsed / (drill.duration_min * 60)) * 100)}%` }} /></div>
       {!canVibrate() && idx === 0 && elapsed < 15 && <span className="small muted">{t('live.soundHint')}</span>}
 
       {!summary ? (
         <>
-          <div className="card" style={{ padding: 8 }}><Pictogram drill={drill} size="sm" /></div>
           {drill.scoring.random_m && <RandomDistance key={`rd-${drill.id}`} range={drill.scoring.random_m} />}
           <p className="live-q">{drillQuestion(drill, settings?.real_hcp ?? null, t)}</p>
           <ResultInput key={drill.id} drill={drill} onChange={setInput} elapsedMin={elapsed / 60} realHcp={settings?.real_hcp ?? null} />
-          <label className="stack small"><span className="label">{t('live.notes')}</span>
-            <textarea className="field" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={2000} /></label>
-          <div className="grid2">
+          <div className="grid2" id="live-actions">
             <button className="btn" onClick={next}>{t('live.skip')}</button>
             <button className="btn primary" disabled={!input} onClick={save}>{t('live.save')}</button>
           </div>
+          {showNotes || notes ? (
+            <label className="stack small"><span className="label">{t('live.notes')}</span>
+              <textarea className="field" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={2000} autoFocus={showNotes && !notes} /></label>
+          ) : (
+            <div className="row between small">
+              <button className="linkbtn" onClick={() => setShowNotes(true)}>＋ {t('live.addNote')}</button>
+              <a href="#howto" className="small">{t('live.howTo')} ↓</a>
+            </div>
+          )}
           <DrillHowTo drill={drill} band={band} />
         </>
       ) : (
@@ -113,7 +122,7 @@ function DrillHowTo({ drill, band }: { drill: Drill; band: Band | null }) {
   const { t, i18n } = useTranslation();
   const text = (i18n.language === 'en' && drill.text.en) || drill.text.de;
   return (
-    <section className="card stack" aria-label={t('live.howTo')}>
+    <section className="card stack" id="howto" aria-label={t('live.howTo')}>
       <span className="label">{t('live.howTo')}</span>
       <div className="card" style={{ padding: 8, background: 'var(--surface)' }}><Pictogram drill={drill} /></div>
       {([['drills.setup', text.setup], ['drills.goal', text.goal], ['drills.procedure', text.procedure]] as const).map(([k, v]) => (
@@ -131,9 +140,9 @@ function RandomDistance({ range }: { range: [number, number] }) {
   const roll = (prev?: number) => { let v: number; do { v = range[0] + Math.floor(Math.random() * (range[1] - range[0] + 1)); } while (v === prev); return v; };
   const [d, setD] = useState(() => roll());
   return (
-    <div className="card row between" style={{ padding: 12 }}>
-      <span className="stack" style={{ gap: 0 }}><span className="label">{t('live.nextDist')}</span><span className="num" style={{ fontSize: 34, fontWeight: 500 }}>{d} m</span></span>
-      <button className="btn" onClick={() => setD(roll(d))}>🎲 {t('live.roll')}</button>
+    <div className="card row between" style={{ padding: '6px 6px 6px 12px' }}>
+      <span className="row" style={{ gap: 8, alignItems: 'baseline' }}><span className="label">{t('live.nextDist')}</span><span className="num" style={{ fontSize: 26, fontWeight: 600 }}>{d} m</span></span>
+      <button className="btn" onClick={() => setD(roll(d))} aria-label={t('live.roll')}>🎲</button>
     </div>
   );
 }
