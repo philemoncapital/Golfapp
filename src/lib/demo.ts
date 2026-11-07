@@ -5,6 +5,8 @@
 const KEY = 'pulse-demo';
 function read(): boolean {
   try {
+    // short URL: /demo switches the demo on
+    if (window.location.pathname.replace(/\/+$/, '') === '/demo') { localStorage.setItem(KEY, '1'); window.history.replaceState(null, '', '/'); return true; }
     const p = new URLSearchParams(window.location.search).get('demo');
     if (p === '1') localStorage.setItem(KEY, '1');
     if (p === '0') localStorage.removeItem(KEY);

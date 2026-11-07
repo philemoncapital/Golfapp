@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { db, getSettings } from './lib/db';
 import { useLive } from './lib/useLive';
@@ -63,6 +63,7 @@ export default function App() {
           <Route path="/friends/:id" element={<FriendProfile />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/achievements" element={<Achievements />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
           {import.meta.env.DEV && <Route path="/dev/pictograms" element={<Suspense fallback={null}><DevPictograms /></Suspense>} />}
         </Routes>
       </main>
