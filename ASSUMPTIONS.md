@@ -63,3 +63,9 @@ Everything the app computes that is not stated in the drill booklet is listed he
 ## Demo mode
 - All demo players, sessions and results are invented test data, not golf facts. Results are real drill inputs chosen so that their training HCP follows each player's real HCP ± a random category offset, improving slowly over 100 days, plus noise (σ = 3.5 HCP).
 - Demo title "since" dates are pseudo-random (3–40 days ago); achievement dates are reconstructed from the generated history.
+
+## Redesign (Nov 2026)
+- Category colours were chosen with the data-viz palette validator for the dark surface; true pastels failed it (too light, too grey, sky vs. lavender indistinguishable for colour-blind users), so charts use mid-tone versions and pastels are reserved for accents and decoration.
+- Home "Zeit · 4 Wochen" and the 4-week chart use the same practice-minutes rule as everywhere else (drill duration once per session).
+- Saved sessions sync last-write-wins by `updated_at`; deletes are soft so other devices learn about them.
+- Pictograms are schematic and not to scale; distances are written on tags.

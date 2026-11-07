@@ -15,6 +15,8 @@ import SessionBuilder from './screens/SessionBuilder';
 import Live from './screens/Live';
 import Profile from './screens/Profile';
 import Achievements from './screens/Achievements';
+import { lazy, Suspense } from 'react';
+const DevPictograms = lazy(() => import('./screens/DevPictograms'));
 import { UnlockToasts } from './components/UnlockToasts';
 import { isDemo, setDemo } from './lib/demo';
 
@@ -61,6 +63,7 @@ export default function App() {
           <Route path="/friends/:id" element={<FriendProfile />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/achievements" element={<Achievements />} />
+          {import.meta.env.DEV && <Route path="/dev/pictograms" element={<Suspense fallback={null}><DevPictograms /></Suspense>} />}
         </Routes>
       </main>
       <UnlockToasts />
