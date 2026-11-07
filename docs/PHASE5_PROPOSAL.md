@@ -15,6 +15,35 @@ Das heißt:
 - Ich habe nichts aus dem Gedächtnis ergänzt und als verifiziert ausgegeben. Wo ich Hintergrundwissen nutze (z. B. das Erscheinungsjahr eines Buchs), steht ausdrücklich „aus Erinnerung, nicht verifiziert“.
 - **Um echt zu verifizieren:** In den Umgebungseinstellungen (Cloud-Environment-Menü in der Titelleiste der Session → Edit → Network access) mindestens diese Domains erlauben: `mygolfspy.com`, `golfmonthly.com`, `golfdigest.com`, `golf.com`, `todays-golfer.com`, `shotscope.com`, `arccosgolf.com`, `massgolf.org`, `content.schwab.com`, `chicagogolfreport.com`, `golfingfocus.com`, `catdir.loc.gov`, `pubmed.ncbi.nlm.nih.gov`, `researchgate.net`. Danach kann dieser Bericht in einem Durchgang verifiziert werden. Anleitung: https://code.claude.com/docs/en/cloud-environments#network-access
 
+
+## 0a. Verifikation (7. Nov. 2026)
+
+Geprüft durch direkten Abruf der Originalseiten. Seiten, die automatische Abrufe blockieren, wurden nicht umgangen.
+
+| # | Übung | Ergebnis | Was die Originalquelle sagt | Folgen für den Entwurf |
+|---|---|---|---|---|
+| A1 | Luke Donald 30-Ball Wedge Game | **nicht prüfbar** | golfdigest.com blockt automatische Abrufe (HTTP 403). | Offen. Artikeltext von David nötig, oder Übung streichen. |
+| A2 | Random Yardage (Justin Thomas) | **verifiziert** | Australian Golf Digest, 25.01.2019, Justin Thomas (Tags: Ron Kaspriske, Matt Killen): „I set it up to spit out random yardages, from 126 to 150 yards as an example, and I have to hit whatever shot it requests.“ Ohne Launch-Monitor: „give yourself a new target or a new challenge – or both – for every ball you hit“. | Distanz 115–137 m stimmt (126–150 yd). **Ballzahl, Radius-Wertung und HCP-Tabelle stehen nicht in der Quelle.** Sie sind unsere Anpassung bzw. Herleitung und so zu kennzeichnen. |
+| A3 | Pinseeker | **teilweise verifiziert** | MassGolf, 12.06.2020, „Driving range games – Pinseeker“: „pick one and hit 10 balls toward it. Whoever gets the greatest number of balls closest to the pin (5 feet, 10 feet, your call), wins.“ | 10 Bälle auf eine Fahne, Treffer im selbst gewählten Radius: bestätigt. **120 m und die Punkte +2/+1/0 stehen hier nicht.** Die Golf-Digest-Fassung ist nicht prüfbar (403). Vorschlag: MassGolf-Fassung mit Radius-Wertung. |
+| A4 | Approach-Iron-Test (Robertson et al. 2013) | **nicht prüfbar** | PubMed zeigt Automaten nur eine Cookie-Sperre, der Verlag (Taylor & Francis) blockt (403). | Offen. Abstract von David nötig, oder streichen. |
+| A5 | 10-Shot-Drill | **verifiziert – mit Korrektur** | Today's Golfer, 13.08.2025, Übung von Karl Morris (Performance-Coach, „worked with six major winners“), Artikel von Rob McGarr: „hit 10 shots to 10 different targets with 10 different clubs. You'll award each shot a number – one, two or three“. Kategorien Good / Good Enough / Poor. Laut Text sind „threes“ die schlechten Schläge („a few fewer threes“). | **Wertung im Entwurf war umgedreht:** 1 = Good, 2 = Good Enough, 3 = Poor, **niedrigere Summe ist besser** (10–30). Die Quelle nennt **keine** Distanzen und keine 10-%/20%-Grenzen; „10 different clubs“ schließt auch das lange Spiel ein. Die Übung passt also zu Annäherung **und** langem Spiel. |
+
+**Daten für die HCP-Tabellen**
+
+- **D1 Arccos (Layup-Artikel): verifiziert.**
+  - arccosgolf.com, 08.11.2018, über 100 Mio. Schläge.
+  - Werte wie im Entwurf, eine Korrektur: 20+ aus 60–80 yd = **62,43** ft (nicht 62,45).
+  - Der Tippfehler „yards“ beim Wert 16–20 steht wirklich im Original.
+- **D3 Arccos (50-%-Distanzen): verifiziert.**
+  - arccosgolf.com, 22.10.2024.
+  - Werte exakt: 92 / 110 / 129 / 147 / 165 yd.
+- **D2 Shot Scope über MyGolfSpy: nicht prüfbar.**
+  - mygolfspy.com blockt (403).
+  - Der Shot-Scope-Blog lädt seine Inhalte nur per Browser-Skript.
+  - Folge: Alle Tabellen, die auf D2 beruhen (A4, A5, Teile von A2/A3), bleiben **Annahme**.
+
+**Empfehlung nach Prüfung:** A2, A3 (MassGolf-Fassung) und A5 (korrigierte Wertung) können mit gekennzeichneten Anpassungen eingebaut werden. A1 und A4 brauchen den Originaltext oder entfallen.
+
 ---
 
 ## 1. Zusammenfassung
