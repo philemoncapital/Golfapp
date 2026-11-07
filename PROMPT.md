@@ -156,6 +156,7 @@ For each drill, build anchor points (band midpoint HCP, band target). Examples: 
   - the drill detail page (large, with the setup steps);
   - the live screen (with the active station highlighted).
 - Recreate each diagram from the drill description. Do not copy or trace the booklet artwork.
+- **Revision (Nov 2026):** every seed drill gets its own detailed, illustrated scene (turf with mowing stripes, greens with fringe, bunkers with sand texture, flags, cups, tee pegs, alignment sticks, clubs, towels, flight paths dashed in the air and solid when rolling, numbered stations, distance and points tags). Each scene is reviewed by a design reviewer and the review comments are applied. Custom drills keep the declarative metre-based spec.
 
 ## 8. Leaderboards, fun titles, medals and achievements
 
@@ -238,6 +239,12 @@ The home screen is the app's start page (route `/`, nav item "Home"). It replace
 6. **Friends:** the newest completed session of any friend (name, date, duration, drills, result), according to that friend's privacy settings (9.8).
 7. **My groups:** for every group I am in, my rank on each category board and the overall board ("2 / 5"), plus the titles I currently hold there (8.1, 8.2). Members who are not yet eligible see "not ranked yet" with the eligibility rule.
 
+Revision (Nov 2026, David's feedback):
+- **Composition chart** in the handicap block: each category's training HCP on a shared HCP axis against a dashed line at the real handicap (connector = gap), plus the share of practice time per category over the last 4 weeks. Tapping a row shows its numbers.
+- **4-week chart:** practice minutes per day for the last 28 days, stacked by category, with week totals and a mark when the weekly goal was met.
+- **Saved sessions** (9.2) as horizontally scrolling tiles near the top; tapping a tile loads it into the session builder; the last tile creates a new session.
+- **Less text:** short labels, explanations behind an "ⓘ" toggle, no footnotes under every block.
+
 Rules:
 - Style as in section 11: one card per block, labels in 11 px uppercase, tabular numerals, at most one filled primary button (e.g. "Start session"), no charting-library look.
 - **Empty states** for every block as long as data is missing, each saying what fills it: no real handicap yet → link to the profile; no results → "build your first session"; no achievements yet; no friends yet → link to add friends; no groups yet → link to create or join a group; signed out or local mode → explain that friends and groups need an account.
@@ -254,7 +261,7 @@ Sign up (name, email, password, email verification), then display name, real han
   - The user enters the available time.
   - The app fills the session with drills that match the current recommended category split, prefers drills with little recent data, and avoids repeating the last session.
   - The user can swap any suggested drill.
-- Sessions can be saved before starting.
+- Sessions can be saved before starting. **A session can be named and saved as a reusable "saved session"** (drills in order + name). Saved sessions can be loaded, changed and saved again, saved as a new copy, or deleted. They sync to the server (`session_templates`) and appear as tiles on the home screen (9.0).
 
 ### 9.3 Live drill mode
 - Timer counting down from the drill duration. Store start timestamps, never rely on interval ticks only.
@@ -264,6 +271,7 @@ Sign up (name, email, password, email verification), then display name, real han
   2. otherwise a "golf ball dropping into the cup" sound, synthesised with the Web Audio API or taken from a CC0-licensed sample (record the source and licence in `CREDITS.md`).
 - On iOS, unlock audio on the user's "Start" tap.
 - Result input as in 6.1, plus per-drill notes (free text).
+- **Below the input the drill is explained again** (large pictogram, setup, goal, procedure, the target for my band, equipment), so the player never has to leave the live screen.
 - Pause, skip and finish actions. After each drill, show a summary: result, the booklet target for the user's band, the resulting drill HCP, and the change in group rank.
 
 ### 9.4 Personal bests and weekly goal
@@ -337,6 +345,13 @@ Sign up (name, email, password, email verification), then display name, real han
 Provide SQL migrations, RLS policies, scheduled functions (daily title computation) and a seed script, including `achievement_defs`.
 
 ## 11. Design system (Pulse, balanced)
+
+> **Revision (Nov 2026, David's feedback)** – overrides the colour values below where they differ:
+> - More visual interest through **gradients**: page background radial dark grey (#1C2024) → black (#0A0B0D); cards a subtle diagonal gradient (#1D2126 → #121418); hero card with a soft accent glow; primary button and progress bars use an accent gradient.
+> - **Pastel accents**, user-selectable: mint #9BE3C3 (default), sky #A2D8FF, peach #FFC0A3, lavender #D9C5FF (each with a second gradient stop).
+> - **Category colours** are fixed and validated for charts on the dark surface (lightness band, chroma floor, colour-blind separation, contrast): Off the Tee #38AB81, Approach #4D9AD8, Short Game #D07A53, Putting #9F82D2. Their pastel tints (#9BE3C3, #A2D8FF, #FFC0A3, #D9C5FF) are used only for glows, chips and pictogram details, never for small chart marks.
+> - Corner radius 16 px for cards, 12 px for buttons.
+> - **Less text** on every screen: labels over sentences; explanations behind an "ⓘ".
 
 The goal is a middle ground: dark and modern like current sports apps, but neither ultra-thin and stark nor bubbly and colourful.
 

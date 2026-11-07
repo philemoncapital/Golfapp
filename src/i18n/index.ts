@@ -21,7 +21,7 @@ const de = {
     remaining: 'Restzeit', drill: 'Übung {{i}} von {{n}}', pause: 'Pause', resume: 'Weiter', skip: 'Überspringen', save: 'Ergebnis speichern',
     quick: 'Gesamtwert eingeben', undo: 'Rückgängig', notes: 'Notizen', result: 'Ergebnis', yourHcp: 'Übungs-Handicap', target: 'Ziel deiner Stufe',
     next: 'Nächste Übung', finish: 'Session beenden', done: 'Session beendet', timeUp: 'Zeit ist um', soundHint: 'Ohne Vibration spielt die App einen Ton – Lautlos-Schalter beachten.',
-    holed: 'Gelocht', green: 'Grün', missed: 'Verfehlt', notFinished: 'Nicht geschafft – Treffer:', minutes: 'Minuten', ball: 'Ball', pos: 'Position',
+    howTo: 'So geht’s', holed: 'Gelocht', green: 'Grün', missed: 'Verfehlt', notFinished: 'Nicht geschafft – Treffer:', minutes: 'Minuten', ball: 'Ball', pos: 'Position',
   },
   profile: {
     title: 'Profil', realHcp: 'Echtes Handicap', goal: 'Wochenziel (Minuten)', language: 'Sprache', accent: 'Akzentfarbe', save: 'Speichern', saved: 'Gespeichert',
@@ -51,7 +51,7 @@ const en: typeof de = {
     remaining: 'Time left', drill: 'Drill {{i}} of {{n}}', pause: 'Pause', resume: 'Resume', skip: 'Skip', save: 'Save result',
     quick: 'Enter total', undo: 'Undo', notes: 'Notes', result: 'Result', yourHcp: 'Drill handicap', target: 'Target for your band',
     next: 'Next drill', finish: 'Finish session', done: 'Session finished', timeUp: 'Time is up', soundHint: 'Without vibration the app plays a sound – check the silent switch.',
-    holed: 'Holed', green: 'Green', missed: 'Missed', notFinished: 'Not finished – hits:', minutes: 'minutes', ball: 'Ball', pos: 'Position',
+    howTo: 'How it works', holed: 'Holed', green: 'Green', missed: 'Missed', notFinished: 'Not finished – hits:', minutes: 'minutes', ball: 'Ball', pos: 'Position',
   },
   profile: {
     title: 'Profile', realHcp: 'Real handicap', goal: 'Weekly goal (minutes)', language: 'Language', accent: 'Accent colour', save: 'Save', saved: 'Saved',
@@ -139,6 +139,24 @@ const en2: typeof de2 = {
   },
 };
 
+// ---- Saved sessions + redesign (Nov 2026)
+const de5 = {
+  session: {
+    ...de.session, name: 'Name der Session', namePh: 'Session benennen …', emptyShort: 'Noch leer. Füge Übungen hinzu oder lass bauen.',
+    addDrills: 'Übungen', autoShort: 'Bauen', save: 'Speichern', update: 'Speichern', savedOk: '✓ Gespeichert', saveAsNew: 'Als neue Session speichern',
+    clear: 'Leeren', savedList: 'Gespeicherte Sessions', noSaved: 'Noch keine gespeichert. Bau oben eine und tippe „Speichern“.',
+    confirmDelete: '„{{name}}“ löschen?', defaultName: 'Session {{min}} Min', drillsN_one: '{{count}} Übung', drillsN_other: '{{count}} Übungen', newTile: 'Neue Session',
+  },
+};
+const en5: typeof de5 = {
+  session: {
+    ...en.session, name: 'Session name', namePh: 'Name this session …', emptyShort: 'Empty. Add drills or let the app build one.',
+    addDrills: 'Drills', autoShort: 'Auto', save: 'Save', update: 'Save', savedOk: '✓ Saved', saveAsNew: 'Save as new session',
+    clear: 'Clear', savedList: 'Saved sessions', noSaved: 'Nothing saved yet. Build one above and tap “Save”.',
+    confirmDelete: 'Delete “{{name}}”?', defaultName: 'Session {{min}} min', drillsN_one: '{{count}} drill', drillsN_other: '{{count}} drills', newTile: 'New session',
+  },
+};
+
 // ---- Phase 7: achievements (names and criteria from PROMPT.md section 8)
 const de3 = {
   tier: { bronze: 'Bronze', silver: 'Silber', gold: 'Gold' },
@@ -190,7 +208,8 @@ const de4 = {
     achievements: 'Zuletzt erreicht', noAchievements: 'Noch keine Erfolge – die erste Session bringt „Erster Abschlag“.',
     friend: 'Neu bei Freunden', noFriendSession: 'Noch keine Session von Freunden zu sehen.', addFriends: 'Freunde hinzufügen',
     groups: 'Meine Platzierungen', noGroups: 'Noch in keiner Gruppe.', social: 'Freunde & Gruppen',
-    needsAccount: 'Erfolge, Freunde und Platzierungen brauchen ein Konto.', sessionMissing: 'Session nicht gefunden.', rejected: 'vom Server abgelehnt',
+    needsAccount: 'Erfolge, Freunde und Platzierungen brauchen ein Konto.', training: 'Trainings-HCP', real: 'Echt', setHcpShort: 'Eintragen', realShort: 'Echt',
+    vsReal: 'zum echten', time4w: 'Zeit · 4 Wochen', howCalc: 'So wird gerechnet', edit: 'Bearbeiten', train4w: 'Training · 4 Wochen', goalMet: 'Wochenziel erreicht', chart4wAria: 'Übungsminuten je Tag, letzte 4 Wochen, gesamt {{total}} Minuten', sessionMissing: 'Session nicht gefunden.', rejected: 'vom Server abgelehnt',
   },
 };
 const en4: typeof de4 = {
@@ -202,7 +221,8 @@ const en4: typeof de4 = {
     achievements: 'Recently earned', noAchievements: 'No achievements yet – your first session earns “First Tee”.',
     friend: 'New from friends', noFriendSession: 'No friend sessions to show yet.', addFriends: 'Add friends',
     groups: 'My placements', noGroups: 'Not in a group yet.', social: 'Friends & groups',
-    needsAccount: 'Achievements, friends and placements need an account.', sessionMissing: 'Session not found.', rejected: 'rejected by the server',
+    needsAccount: 'Achievements, friends and placements need an account.', training: 'Training HCP', real: 'Real', setHcpShort: 'Add', realShort: 'Real',
+    vsReal: 'vs. real', time4w: 'Time · 4 weeks', howCalc: 'How it is calculated', edit: 'Edit', train4w: 'Practice · 4 weeks', goalMet: 'Weekly goal met', chart4wAria: 'Practice minutes per day, last 4 weeks, {{total}} minutes in total', sessionMissing: 'Session not found.', rejected: 'rejected by the server',
   },
 };
 const en3: typeof de3 = {
@@ -246,5 +266,5 @@ const en3: typeof de3 = {
   },
 };
 
-i18n.use(initReactI18next).init({ resources: { de: { translation: { ...de, ...de2, ...de3, ...de4 } }, en: { translation: { ...en, ...en2, ...en3, ...en4 } } }, lng: 'de', fallbackLng: 'de', interpolation: { escapeValue: false } });
+i18n.use(initReactI18next).init({ resources: { de: { translation: { ...de, ...de2, ...de3, ...de4, ...de5 } }, en: { translation: { ...en, ...en2, ...en3, ...en4, ...en5 } } }, lng: 'de', fallbackLng: 'de', interpolation: { escapeValue: false } });
 export default i18n;

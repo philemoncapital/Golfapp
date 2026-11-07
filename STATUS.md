@@ -16,6 +16,8 @@ Order agreed with David: Phase 6 → Phase 7 → Home screen (9.0) → remaining
 
 - **Demo mode** (`?demo=1`): invented test data (30 sessions, 10 friends, 2 groups), local only.
 
+- **Redesign (Nov 2026):** pastel accents + gradients, home charts (HCP composition, 4 weeks), saved sessions (name/save/load, home tiles), live how-to, 25 illustrated pictograms (design-reviewed).
+
 **Next:** open items of Phases 2–4 (17 pictograms, English drill texts, drag and drop, station signals, charts, XLSX export), then Phase 8.
 
 ## Database migrations (run each once in the Supabase SQL editor, in order)
@@ -24,6 +26,7 @@ Order agreed with David: Phase 6 → Phase 7 → Home screen (9.0) → remaining
 | `0001_init.sql` + `seed.sql` | presumably applied (please confirm) |
 | `0002_social.sql` | **to run** |
 | `0003_achievements.sql` | **to run (after 0002)** |
+| `0004_design_templates.sql` | **to run (after 0003)** – pastel accents, saved sessions |
 
 ## Tests
 - `npm test` – engine unit tests (Vitest)

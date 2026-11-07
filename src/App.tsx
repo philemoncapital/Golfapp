@@ -3,6 +3,7 @@ import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { db, getSettings } from './lib/db';
 import { useLive } from './lib/useLive';
+import { applyAccent } from './lib/theme';
 import Home from './screens/Home';
 import SessionDetail from './screens/SessionDetail';
 import Social from './screens/Social';
@@ -14,6 +15,8 @@ import SessionBuilder from './screens/SessionBuilder';
 import Live from './screens/Live';
 import Profile from './screens/Profile';
 import Achievements from './screens/Achievements';
+import { lazy, Suspense } from 'react';
+const DevPictograms = lazy(() => import('./screens/DevPictograms'));
 import { UnlockToasts } from './components/UnlockToasts';
 import { isDemo, setDemo } from './lib/demo';
 
@@ -33,10 +36,7 @@ export default function App() {
     if (!settings) return;
     if (i18n.language !== settings.language) void i18n.changeLanguage(settings.language);
     document.documentElement.lang = settings.language;
-    document.documentElement.style.setProperty('--accent', settings.accent);
-    const hex = settings.accent.replace('#', '');
-    const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16));
-    document.documentElement.style.setProperty('--accent-soft', `rgba(${r}, ${g}, ${b}, 0.12)`);
+    applyAccent(settings.accent);
   }, [settings, i18n]);
   const n = plan?.drill_ids.length ?? 0;
   const { pathname } = useLocation();
@@ -63,6 +63,7 @@ export default function App() {
           <Route path="/friends/:id" element={<FriendProfile />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/achievements" element={<Achievements />} />
+          {import.meta.env.DEV && <Route path="/dev/pictograms" element={<Suspense fallback={null}><DevPictograms /></Suspense>} />}
         </Routes>
       </main>
       <UnlockToasts />

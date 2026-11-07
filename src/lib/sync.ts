@@ -1,6 +1,7 @@
 import { supabase } from './supabase';
 import { db, getSettings } from './db';
 import { isDemo } from './demo';
+import { mergeServerTemplates } from './templates';
 
 export type SyncState = 'offline' | 'local' | 'ok' | 'error' | 'syncing';
 type Listener = (s: SyncState, pushed: number) => void;
@@ -40,6 +41,16 @@ async function run(): Promise<SyncState> {
       await db.sessions.update(s.id, { synced: 1 });
       pushed++;
     }
+    // saved sessions: push local changes, then pull (last write wins)
+    const tpl = await db.templates.where('synced').equals(0).toArray();
+    if (tpl.length) {
+      const { error } = await supabase.from('session_templates').upsert(tpl.map((t) => ({ id: t.id, user_id: user.id, name: t.name, drill_ids: t.drill_ids, deleted: t.deleted, created_at: t.created_at })));
+      if (error && !REJECT.has(error.code ?? '')) throw error;
+      await db.templates.bulkUpdate(tpl.map((t) => ({ key: t.id, changes: { synced: 1 as const } })));
+      pushed += tpl.length;
+    }
+    const { data: srv, error: tErr } = await supabase.from('session_templates').select('id, name, drill_ids, deleted, created_at, updated_at').eq('user_id', user.id);
+    if (!tErr && srv) await mergeServerTemplates(srv);
     const results = await db.results.where('synced').equals(0).toArray();
     const row = (r: (typeof results)[number]) => ({ id: r.id, user_id: user.id, drill_id: r.drill_id, input: r.input, created_at: r.created_at, session_id: r.session_id });
     if (results.length) {

@@ -49,3 +49,21 @@ describe('session summaries', () => {
     expect(out[0]).toMatchObject({ n_results: 0, mean_hcp: null, minutes: 0 });
   });
 });
+
+import { dailyMinutes, minutesByCategory } from './stats';
+describe('daily minutes (4-week chart)', () => {
+  it('returns one row per day, oldest first, split by category', () => {
+    const now = new Date(2026, 10, 7, 18);
+    const rs = [v('circle-putting', 8, new Date(2026, 10, 7, 9).toISOString(), 's'), v('sandy-par', 15, new Date(2026, 10, 7, 9, 30).toISOString(), 's'),
+      v('circle-putting', 9, new Date(2026, 10, 1, 9).toISOString(), 'q')];
+    const d = dailyMinutes(rs, 28, now);
+    expect(d).toHaveLength(28);
+    expect(d[27].date).toBe('2026-11-07');
+    expect(d[27].putting).toBeGreaterThan(0);
+    expect(d[27].short).toBeGreaterThan(0);
+    expect(d[27].total).toBe(d[27].putting + d[27].short);
+    expect(d[21].putting).toBe(d[27].putting);
+    expect(d[0].total).toBe(0);
+    expect(minutesByCategory(rs, new Date(2026, 9, 1)).putting).toBe(2 * d[27].putting);
+  });
+});

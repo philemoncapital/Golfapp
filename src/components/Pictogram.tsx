@@ -1,4 +1,6 @@
 import type { Drill } from '../engine/types';
+import { SCENES } from './picto/scenes';
+import { Defs, VW, VH, useIds, SmCtx } from './picto/kit';
 
 /** Declarative pictogram spec. Coordinates in metres: x = across (0 = centre line), y = distance from the start point. */
 export type El =
@@ -13,7 +15,24 @@ export interface Spec { w: number; h: number; els: El[] }
 
 const C = { line: 'var(--muted)', text: 'var(--text-2)', accent: 'var(--accent)', green: 'var(--green-fill)', sand: 'var(--sand-fill)' };
 
-export function Pictogram({ drill, size = 'lg', activeStation }: { drill: Drill; size?: 'sm' | 'lg'; activeStation?: number }) {
+export function Pictogram(props: { drill: Drill; size?: 'sm' | 'lg'; activeStation?: number }) {
+  return props.drill.id in SCENES ? <ScenePicto {...props} /> : <SpecPicto {...props} />;
+}
+
+/** Illustrated scene (all seed drills). */
+function ScenePicto({ drill, size = 'lg', activeStation }: { drill: Drill; size?: 'sm' | 'lg'; activeStation?: number }) {
+  const id = useIds();
+  const ctx = { sm: size === 'sm', active: activeStation };
+  return (
+    <svg viewBox={`0 0 ${VW} ${VH}`} width="100%" role="img" aria-label={drill.title} style={{ display: 'block', borderRadius: 10, overflow: 'hidden' }}>
+      <Defs id={id} />
+      <SmCtx.Provider value={ctx.sm}>{SCENES[drill.id](id, ctx)}</SmCtx.Provider>
+    </svg>
+  );
+}
+
+/** Declarative metre-based spec: custom drills (4.3) and fallback. */
+function SpecPicto({ drill, size = 'lg', activeStation }: { drill: Drill; size?: 'sm' | 'lg'; activeStation?: number }) {
   const spec = SPECS[drill.id] ?? fallback(drill);
   const W = 300, H = size === 'sm' ? 150 : 300;
   const pad = 18, sx0 = (W - 2 * pad) / spec.w, sy = (H - 2 * pad) / spec.h, s = Math.min(sx0, sy);
