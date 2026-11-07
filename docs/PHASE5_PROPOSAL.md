@@ -22,7 +22,7 @@ Geprüft durch direkten Abruf der Originalseiten. Seiten, die automatische Abruf
 
 | # | Übung | Ergebnis | Was die Originalquelle sagt | Folgen für den Entwurf |
 |---|---|---|---|---|
-| A1 | Luke Donald 30-Ball Wedge Game | **nicht prüfbar** | golfdigest.com blockt automatische Abrufe (HTTP 403). | Offen. Artikeltext von David nötig, oder Übung streichen. |
+| A1 | Luke Donald 30-Ball Wedge Game | **verifiziert** (Artikeltext von David eingefügt) | Golf Digest, Luke Kerr-Dineen, 28.05.2025, „One of the best wedge players ever trusts this drill—how it works“: „Drop three golf balls at 75 yards · Hit those shots towards a pin · Record how far away each shot finished · Walk three yards further away, to 78 yards · Drop three more golf balls, and repeat“, 10-mal (75, 78, … 102 yd) = 30 Bälle. Variante laut Artikel: von einem Platz auf verschiedene Ziele gleicher Distanz. Donald: „Create variability and then attach a score“. | Ablauf und Stationen 75–102 yd (≈ 69–93 m) **bestätigt**; die Unsicherheit im Entwurf entfällt. Die Quelle nennt **keine Wertung und keine Benchmarks**. Die Radius-Wertung (innerhalb/außerhalb) und die HCP-Tabelle (Arccos D1) sind unsere Anpassung bzw. Herleitung. |
 | A2 | Random Yardage (Justin Thomas) | **verifiziert** | Australian Golf Digest, 25.01.2019, Justin Thomas (Tags: Ron Kaspriske, Matt Killen): „I set it up to spit out random yardages, from 126 to 150 yards as an example, and I have to hit whatever shot it requests.“ Ohne Launch-Monitor: „give yourself a new target or a new challenge – or both – for every ball you hit“. | Distanz 115–137 m stimmt (126–150 yd). **Ballzahl, Radius-Wertung und HCP-Tabelle stehen nicht in der Quelle.** Sie sind unsere Anpassung bzw. Herleitung und so zu kennzeichnen. |
 | A3 | Pinseeker | **teilweise verifiziert** | MassGolf, 12.06.2020, „Driving range games – Pinseeker“: „pick one and hit 10 balls toward it. Whoever gets the greatest number of balls closest to the pin (5 feet, 10 feet, your call), wins.“ | 10 Bälle auf eine Fahne, Treffer im selbst gewählten Radius: bestätigt. **120 m und die Punkte +2/+1/0 stehen hier nicht.** Die Golf-Digest-Fassung ist nicht prüfbar (403). Vorschlag: MassGolf-Fassung mit Radius-Wertung. |
 | A4 | Approach-Iron-Test (Robertson et al. 2013) | **nicht prüfbar** | PubMed zeigt Automaten nur eine Cookie-Sperre, der Verlag (Taylor & Francis) blockt (403). | Offen. Abstract von David nötig, oder streichen. |
@@ -42,7 +42,7 @@ Geprüft durch direkten Abruf der Originalseiten. Seiten, die automatische Abruf
   - Der Shot-Scope-Blog lädt seine Inhalte nur per Browser-Skript.
   - Folge: Alle Tabellen, die auf D2 beruhen (A4, A5, Teile von A2/A3), bleiben **Annahme**.
 
-**Empfehlung nach Prüfung:** A2, A3 (MassGolf-Fassung) und A5 (korrigierte Wertung) können mit gekennzeichneten Anpassungen eingebaut werden. A1 und A4 brauchen den Originaltext oder entfallen.
+**Empfehlung nach Prüfung:** A1, A2, A3 (MassGolf-Fassung) und A5 (korrigierte Wertung) können mit gekennzeichneten Anpassungen eingebaut werden. A4 braucht den Abstract oder entfällt.
 
 ---
 
