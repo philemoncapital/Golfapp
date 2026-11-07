@@ -39,7 +39,7 @@ export const SCENES: Record<string, Scene> = {
       ))}
       <TeeBall x={160} y={188} ctx={c} />
       <Flight from={[160, 184]} to={[157, 156]} bend={-10} id={id} />
-      <Dim x1={160} x2={176} y={174} label="10 m" ctx={c} />
+      <Dim x1={176} x2={192} y={150} label="10 m" ctx={c} />
       <Tag x={42} y={186} ctx={c}>15 Min</Tag><Tag x={270} y={186} ctx={c}>3 Treffer → weiter</Tag>
     </>;
   },
@@ -49,7 +49,7 @@ export const SCENES: Record<string, Scene> = {
     <TeeBall x={160} y={182} ctx={c} />
     <Flight from={[160, 178]} to={[150, 56]} bend={-18} roll={[146, 36]} id={id} />
     <Flight from={[160, 178]} to={[174, 134]} bend={12} roll={[176, 126]} muted id={id} />
-    <Tag x={124} y={112} ctx={c} accent>Driver</Tag><Tag x={210} y={146} ctx={c}>Eisen 7</Tag>
+    <Tag x={114} y={112} ctx={c} accent>Driver</Tag><Tag x={210} y={146} ctx={c}>Eisen 7</Tag>
     {['E7', 'D', 'E7', 'D'].map((k, i) => (
       <g key={i}><rect x={14 + i * 22} y={172} width="19" height="16" rx="4" fill={k === 'D' ? 'rgba(155,227,195,0.25)' : 'rgba(242,243,245,0.12)'} stroke={k === 'D' ? 'var(--accent)' : 'rgba(242,243,245,0.3)'} />
         {!c.sm && <text x={23.5 + i * 22} y={183.5} fontSize="8.5" fontWeight="700" textAnchor="middle" fill={k === 'D' ? 'var(--accent)' : 'var(--text-2)'}>{k}</text>}</g>
@@ -58,7 +58,7 @@ export const SCENES: Record<string, Scene> = {
   </>,
   'nine-drives': (id, c) => <>
     <Range id={id} />
-    <path d="M150,196 C150,150 120,120 128,80 C134,48 180,30 214,18" fill="none" stroke="rgba(242,243,245,0.14)" strokeWidth="44" strokeLinecap="round" />
+    <path d="M156,196 C150,150 128,120 140,82 C146,60 156,46 160,34" fill="none" stroke="rgba(242,243,245,0.12)" strokeWidth="40" strokeLinecap="round" />
     <Corridor x={100} y={16} w={120} h={66} label="30 m" ctx={c} />
     <TeeBall x={160} y={182} ctx={c} />
     <Flight from={[160, 178]} to={[166, 44]} bend={16} roll={[168, 30]} id={id} />
@@ -96,18 +96,18 @@ export const SCENES: Record<string, Scene> = {
       {pts.map(([x, y], i) => <g key={i}><Station x={x} y={y} n={i + 1} ctx={c} /><Tag x={x + 34} y={y + 4} ctx={c}>{`${[10, 15, 20, 25][i]} m`}</Tag></g>)}
       <Flight from={[pts[0][0] + 4, pts[0][1] - 6]} to={[156, 52]} bend={-8} roll={[159, 47]} id={id} />
       {[0, 1, 2, 3, 4].map((k) => <Club key={k} x={40} y={128 + k * 9} len={36} angle={-8 + k * 4} />)}
-      <Tag x={42} y={182} ctx={c}>5 Schläger</Tag><Tag x={238} y={98} ctx={c}>Radius je HCP</Tag>
+      <Tag x={42} y={182} ctx={c}>5 Schläger</Tag><Tag x={250} y={100} ctx={c} leader={[184, 62]}>Radius je HCP</Tag>
     </>;
   },
   'attack-the-flag': (id, c) => {
-    const pts = [0.42, 0.62, 0.84].map((t) => along(168, 40, 120, 210, t));
+    const pts = [0.47, 0.66, 0.87].map((t) => along(168, 40, 120, 210, t));
     return <>
       <Rough />
       <Green id={id} cx={168} cy={40} rx={92} ry={28} />
       <Bunker id={id} cx={156} cy={92} rx={60} ry={13} rot={-4} />
       <Ring x={168} y={36} r={18} strong /><Flag x={168} y={38} h={24} />
       {pts.map(([x, y], i) => <g key={i}><Station x={x} y={y} n={i + 1} ctx={c} /><Tag x={x + 36} y={y + 4} ctx={c}>{`${[20, 30, 40][i]} m`}</Tag></g>)}
-      <Flight from={[pts[1][0] + 2, pts[1][1] - 8]} to={[166, 42]} bend={-34} id={id} />
+      <Flight from={[pts[0][0] + 4, pts[0][1] - 8]} to={[166, 42]} bend={-30} id={id} />
       <LoopArrow from={[pts[2][0] - 10, pts[2][1]]} to={[pts[0][0] - 10, pts[0][1] + 2]} bend={36} id={id} />
       <Tag x={60} y={62} ctx={c} leader={[110, 92]}>hoch anspielen</Tag>
       <Tag x={246} y={20} ctx={c}>HCP-Radius</Tag><Tag x={262} y={186} ctx={c}>9 Bälle · 20→40→20</Tag>
@@ -115,7 +115,7 @@ export const SCENES: Record<string, Scene> = {
   },
   'four-stations': (id, c) => {
     const hole: [number, number] = [244, 54];
-    const st = [0.52, 0.66, 0.8, 0.94].map((t) => along(hole[0], hole[1], 20, 186, t));
+    const st = [0.49, 0.64, 0.79, 0.94].map((t) => along(hole[0], hole[1], 20, 186, t));
     return <>
       <Rough />
       <Green id={id} cx={204} cy={74} rx={98} ry={56} />
@@ -177,7 +177,7 @@ export const SCENES: Record<string, Scene> = {
       <Flight from={[st[1][0] + 6, st[1][1] - 6]} to={[210, 52]} bend={-12} id={id} />
       <Ball x={218} y={48} r={3.6} />
       <Ball x={250} y={66} r={3.4} /><Cross x={250} y={66} />
-      <Tag x={270} y={92} ctx={c}>muss liegen bleiben</Tag><Tag x={60} y={22} ctx={c}>8 Treffer · 15 Min</Tag>
+      <Tag x={240} y={22} ctx={c} anchor="start" leader={[222, 40]}>muss liegen bleiben</Tag><Tag x={60} y={186} ctx={c}>8 Treffer · 15 Min</Tag>
     </>;
   },
   'worstball-chipping': (id, c) => <>
@@ -205,7 +205,7 @@ export const SCENES: Record<string, Scene> = {
     <ChipPutt from={[278, 160]} hole={[206, 118]} bend={8} muted id={id} />
     <LoopArrow from={[30, 164]} to={[28, 140]} bend={22} id={id} />
     <Tag x={84} y={22} ctx={c}>Serie: max. 2 Schläge</Tag><Tag x={60} y={120} ctx={c}>sonst wiederholen</Tag>
-    <Tag x={160} y={186} ctx={c}>4–20 m</Tag>
+    <Tag x={160} y={168} ctx={c}>4–20 m</Tag>
   </>,
   'beat-21': (id, c) => {
     const ring = Array.from({ length: 11 }, (_, i) => { const a = (i / 11) * 2 * Math.PI + 0.3; return [160 + 140 * Math.cos(a), 92 + 82 * Math.sin(a)] as [number, number]; });
@@ -217,7 +217,7 @@ export const SCENES: Record<string, Scene> = {
       <Flag x={128} y={82} h={20} /><Flag x={196} y={74} h={20} color={COL.neutral} /><Flag x={176} y={118} h={20} color={COL.neutral} />
       {ring.map(([x, y], i) => <Peg key={i} x={x} y={y} color={i === 3 ? 'var(--accent)' : COL.marker} />)}
       <ChipPutt from={[active[0] + 4, active[1] - 6]} hole={[128, 82]} bend={-12} id={id} />
-      <Tag x={270} y={22} ctx={c}>11 × Chip + Putt</Tag><Tag x={50} y={22} ctx={c}>6–12 m</Tag>
+      <Tag x={270} y={192} ctx={c}>11 × Chip + Putt</Tag><Tag x={50} y={22} ctx={c}>6–12 m</Tag>
     </>;
   },
 
@@ -235,7 +235,7 @@ export const SCENES: Record<string, Scene> = {
     <circle cx={166} cy={96} r="4" fill="none" stroke="var(--text-2)" strokeDasharray="2 2" />
     <Ball x={168} y={34} r={4} />
     <Tag x={244} y={30} ctx={c} accent leader={[172, 34]}>einlochen</Tag>
-    <Tag x={250} y={104} ctx={c} leader={[172, 96]}>1 Schlägerlänge zurück</Tag>
+    <Tag x={256} y={114} ctx={c} leader={[172, 96]}>1 Schlägerlänge zurück</Tag>
     <Tag x={70} y={184} ctx={c}>9 Löcher · 5–20 m</Tag>
   </>,
   'five-balls': (id, c) => <>
@@ -249,32 +249,32 @@ export const SCENES: Record<string, Scene> = {
     <Ball x={160} y={182} />
     <Roll pts={[[160, 176], [160, 60]]} id={id} />
     <BallCount x={176} y={182} n={5} filled={4} />
-    <Pts x={110} y={52} v="+2" ctx={c} at={[154, 52]} /><Pts x={220} y={38} v="+1" ctx={c} /><Pts x={220} y={66} v="−1" ctx={c} weak />
-    <Tag x={262} y={20} ctx={c}>Schläger 50 cm</Tag><Tag x={250} y={52} ctx={c}>Lochhöhe</Tag>
+    <Pts x={110} y={34} v="+2" ctx={c} at={[154, 50]} /><Pts x={220} y={38} v="+1" ctx={c} /><Pts x={220} y={66} v="−1" ctx={c} weak />
+    <Tag x={262} y={20} ctx={c}>Schläger 50 cm</Tag><Tag x={70} y={60} ctx={c} leader={[118, 52]}>Lochhöhe</Tag>
     <Dim x1={104} x2={104} y={180} y2={56} vertical label="7 m" ctx={c} />
   </>,
   'up-and-down-omeara': (id, c) => {
     const hole: [number, number] = [170, 62];
-    const tees: [number, number][] = [[40, 108], [86, 148], [160, 160], [236, 150], [286, 108]];
+    const tees: [number, number][] = [[54, 104], [92, 136], [160, 146], [232, 138], [272, 104]];
     return <>
       <Rough /><Green id={id} cx={160} cy={74} rx={116} ry={58} />
       <Hole x={hole[0]} y={hole[1]} /><Ring x={hole[0]} y={hole[1]} r={11} />
       {tees.map(([x, y], i) => <Peg key={i} x={x} y={y} color={i === 1 ? 'var(--accent)' : COL.marker} />)}
-      <Roll pts={[[92, 142], [160, 70]]} id={id} />
-      <Ball x={161} y={70} r={3.6} />
-      <Roll pts={[[164, 68], [168, 66]]} id={id} />
-      <Dim x1={300} x2={300} y={108} y2={62} vertical label="7–15 m" ctx={c} />
-      <Tag x={160} y={186} ctx={c}>5 Tees auf dem Vorgrün · max. 2</Tag>
+      <Roll pts={[[97, 130], [148, 86]]} id={id} />
+      <Ball x={150} y={84} r={3.6} />
+      <Roll pts={[[153, 81], [165, 67]]} id={id} />
+      <Tag x={70} y={70} ctx={c} leader={[120, 110]}>7–15 m</Tag><Tag x={230} y={22} ctx={c}>max. 2 Schläge</Tag>
+      <Tag x={160} y={186} ctx={c}>5 Tees auf dem Vorgrün</Tag>
     </>;
   },
   'pace-putting': (id, c) => <>
     <Rough /><Green id={id} cx={160} cy={100} rx={150} ry={92} />
     <rect x={142} y={26} width={36} height={32} rx="6" fill="rgba(155,227,195,0.12)" stroke="var(--accent)" strokeOpacity="0.5" strokeDasharray="3 3" />
-    <Hole x={160} y={44} /><Peg x={192} y={58} color={COL.marker} /><Peg x={192} y={26} color={COL.marker} />
+    <Hole x={160} y={48} /><Peg x={192} y={58} color={COL.marker} /><Peg x={192} y={26} color={COL.marker} />
     {[92, 120, 148, 176].map((y, i) => <g key={y}><Peg x={160} y={y} color={i === 3 ? 'var(--accent)' : COL.marker} /><Tag x={128} y={y + 3} ctx={c} anchor="end">{['4,5 m', '6 m', '7,5 m', '9 m'][i]}</Tag></g>)}
     <Roll pts={[[160, 170], [160, 52]]} id={id} />
-    <BallCount x={176} y={176} n={3} filled={1} />
-    <Pts x={112} y={44} v="+3" ctx={c} at={[154, 44]} /><Pts x={222} y={30} v="+2" ctx={c} at={[178, 32]} /><Pts x={222} y={54} v="+1" ctx={c} at={[178, 54]} /><Pts x={240} y={84} v="−1" ctx={c} weak />
+    <BallCount x={172} y={166} n={3} filled={1} />
+    <Pts x={112} y={48} v="+3" ctx={c} at={[154, 48]} /><Pts x={222} y={30} v="+2" ctx={c} at={[178, 32]} /><Pts x={222} y={54} v="+1" ctx={c} at={[178, 54]} /><Pts x={240} y={84} v="−1" ctx={c} weak />
     <Tag x={262} y={186} ctx={c}>3 Putts je Position</Tag>
   </>,
   'control-the-line': (id, c) => <>
@@ -301,13 +301,13 @@ export const SCENES: Record<string, Scene> = {
     const pegs = [0, 90, 180, 270].flatMap((a, k) => [{ p: pol(160, 100, 40, a), n: k + 1 }, { p: pol(160, 100, 62, a), n: k + 5 }]);
     return <>
       <Rough /><Green id={id} cx={160} cy={100} rx={150} ry={92} />
-      <Slope x={60} y={36} w={50} n={3} angle={10} id={id} />
+      <Slope x={258} y={40} w={40} n={3} angle={90} id={id} />
       <line x1={88} y1={100} x2={232} y2={100} stroke="rgba(242,243,245,0.18)" /><line x1={160} y1={28} x2={160} y2={172} stroke="rgba(242,243,245,0.18)" />
       <Hole x={160} y={100} />
       {pegs.map(({ p: [x, y], n }) => <g key={n}><Peg x={x} y={y} color={n === 1 ? 'var(--accent)' : COL.marker} />{!c.sm && <text x={x + 7} y={y - 6} fontSize="9" fontWeight="700" fill="var(--text-2)">{n}</text>}</g>)}
       <CcwArrow cx={160} cy={100} r={80} id={id} />
       <Curve d="M196,104 Q182,112 166,102" id={id} />
-      <Dim x1={160} x2={222} y={118} label="90 / 120 cm" ctx={c} />
+      <Dim x1={168} x2={200} y={84} label="90 cm" ctx={c} /><Dim x1={168} x2={222} y={130} label="120 cm" ctx={c} />
       <Tag x={60} y={186} ctx={c}>8 in Folge · 10 Min</Tag>
     </>;
   },
@@ -336,16 +336,16 @@ export const SCENES: Record<string, Scene> = {
   </>,
   'circle-putting': (id, c) => <>
     <Rough /><Green id={id} cx={160} cy={100} rx={150} ry={92} />
-    <Slope x={66} y={150} w={50} n={3} angle={-12} id={id} />
+    <Slope x={268} y={44} w={40} n={3} angle={90} id={id} />
     <Hole x={160} y={100} />
     <Ring x={160} y={100} r={56} />
     {Array.from({ length: 8 }, (_, i) => pol(160, 100, 56, i * 45)).map(([x, y], i) => <g key={i}>
       {i === (c.active ?? 0) && <circle cx={x} cy={y} r="8" fill="none" stroke="var(--accent)" strokeWidth="1.5" />}
       <Peg x={x} y={y} color={i === (c.active ?? 0) ? 'var(--accent)' : COL.marker} />
       {!c.sm && <text x={x + (Math.cos(i * Math.PI / 4) * 14) - 3} y={y - Math.sin(i * Math.PI / 4) * 14 + 3} fontSize="9" fontWeight="700" fill="var(--text-2)">{i + 1}</text>}</g>)}
-    <Ball x={212} y={110} r={3.8} /><Curve d="M206,110 Q186,118 166,104" id={id} />
+    <Ball x={216} y={100} r={3.8} /><Curve d="M210,101 Q188,114 166,103" id={id} />
     <CcwArrow cx={160} cy={100} r={76} id={id} />
     <Dim x1={160} x2={216} y={84} label="90 cm" ctx={c} />
-    <Tag x={66} y={128} ctx={c}>leichter Break</Tag><Tag x={262} y={186} ctx={c}>Serie zählen</Tag>
+    <Tag x={268} y={130} ctx={c}>leichter Break</Tag><Tag x={262} y={186} ctx={c}>Serie zählen</Tag>
   </>,
 };

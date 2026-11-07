@@ -239,7 +239,8 @@ export function LoopArrow({ from, to, bend = 40, id }: { from: [number, number];
 }
 /** n small balls in a row (counts without text; stays visible at card size). */
 export function BallCount({ x, y, n, filled = n, gap = 7 }: { x: number; y: number; n: number; filled?: number; gap?: number }) {
-  const sm = useSm(), r = sm ? 3 : 2.3, g = sm ? gap * 1.3 : gap;
+  const sm = useSm(), r = 2.3, g = gap;
+  if (sm) return null; // too small to read on cards
   return <g>{Array.from({ length: n }, (_, i) => <circle key={i} cx={x + i * g} cy={y} r={r} fill={i < filled ? '#F4F5F7' : 'none'} stroke="#F4F5F7" strokeOpacity={i < filled ? 0.4 : 0.6} strokeWidth="1" />)}</g>;
 }
 /** Chip (dotted air + short roll) that stops short of the hole, then a solid putt into it. */
