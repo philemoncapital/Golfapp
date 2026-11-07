@@ -1,6 +1,6 @@
 import type { Drill } from '../engine/types';
 import { SCENES } from './picto/scenes';
-import { Defs, VW, VH, useIds } from './picto/kit';
+import { Defs, VW, VH, useIds, SmCtx } from './picto/kit';
 
 /** Declarative pictogram spec. Coordinates in metres: x = across (0 = centre line), y = distance from the start point. */
 export type El =
@@ -26,7 +26,7 @@ function ScenePicto({ drill, size = 'lg', activeStation }: { drill: Drill; size?
   return (
     <svg viewBox={`0 0 ${VW} ${VH}`} width="100%" role="img" aria-label={drill.title} style={{ display: 'block', borderRadius: 10, overflow: 'hidden' }}>
       <Defs id={id} />
-      {SCENES[drill.id](id, ctx)}
+      <SmCtx.Provider value={ctx.sm}>{SCENES[drill.id](id, ctx)}</SmCtx.Provider>
     </svg>
   );
 }
