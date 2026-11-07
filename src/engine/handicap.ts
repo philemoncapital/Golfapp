@@ -86,6 +86,28 @@ export function tripletHcp(achieved: [number, number, number], bands: Band[]): n
   });
 }
 
+/**
+ * Radius drills scored as "1 point per ball inside my circle" (circle = radius of the band of my real HCP).
+ * Band met (hits ≥ pass): from the band midpoint towards the next better band by the share of balls above the pass mark
+ * (best band: towards its lower bound). Not met: from the band midpoint towards the next worse band (worst band: towards 54)
+ * by the missing share. Same rule on the server (0006).
+ */
+export function circleHcp(bands: Band[], bandHi: number, hits: number, balls: number, passHits: number): number {
+  const ord = orderedBands(bands);
+  const i = ord.findIndex((b) => b.hcp_hi === bandHi);
+  if (i < 0) throw new Error('unknown band');
+  const pass = Math.min(Math.max(passHits, 1), balls);
+  const m = mid(ord[i]);
+  if (hits >= pass) {
+    const s = balls > pass ? Math.min((hits - pass) / (balls - pass), 1) : 1;
+    const target = i === ord.length - 1 ? ord[i].hcp_lo : mid(ord[i + 1]);
+    return round1(clamp(m - Math.min(s, 0.999) * (m - target)));
+  }
+  const miss = 1 - hits / pass;
+  const worse = i === 0 ? HCP_MAX : mid(ord[i - 1]);
+  return round1(clamp(m + miss * (worse - m)));
+}
+
 /** Chip to a Towel not finished in time: equivalent minutes = limit × required / hits (assumption, see ASSUMPTIONS.md). */
 export function timeFallbackMinutes(hits: number, limitMin: number, required: number): number {
   return limitMin * required / Math.max(hits, 0.5);
@@ -103,6 +125,8 @@ export function resultHcp(drill: Drill, input: ResultInput): number {
       return radiusHcp(input.balls, s.bands, s.pass_hits ?? Math.ceil((s.balls ?? input.balls.length) / 2), s.balls ?? input.balls.length);
     case 'triplet':
       return tripletHcp(input.achieved, s.bands);
+    case 'circle':
+      return circleHcp(s.bands, input.band_hi, input.hits, input.balls, s.pass_hits ?? Math.ceil(input.balls / 2));
   }
 }
 

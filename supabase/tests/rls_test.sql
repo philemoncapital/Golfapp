@@ -19,6 +19,17 @@ do $$ begin
     raise exception 'FAIL: drill_hcp not recomputed on the server'; end if;
   if (select score from drill_results where id = '10000000-0000-0000-0000-000000000001') <> 8 then
     raise exception 'FAIL: score not recomputed on the server'; end if;
+  -- circle input (0006): 10 of 20 inside the 18-12 circle = midpoint 15; unknown band rejected
+  insert into drill_results (id, user_id, drill_id, input) values ('10000000-0000-0000-0000-000000000002', auth.uid(), 'five-different-clubs', '{"kind":"circle","band_hi":18,"hits":10,"balls":20}');
+  if (select drill_hcp from drill_results where id = '10000000-0000-0000-0000-000000000002') <> 15.0 then raise exception 'FAIL: circle drill_hcp'; end if;
+  begin
+    insert into drill_results (id, user_id, drill_id, input) values (gen_random_uuid(), auth.uid(), 'five-different-clubs', '{"kind":"circle","band_hi":99,"hits":3,"balls":20}');
+    raise exception 'FAIL: circle with unknown band accepted';
+  exception when invalid_parameter_value then null; end;
+  begin
+    insert into drill_results (id, user_id, drill_id, input) values (gen_random_uuid(), auth.uid(), 'circle-putting', '{"kind":"circle","band_hi":26,"hits":3,"balls":5}');
+    raise exception 'FAIL: circle input on a non-radius drill accepted';
+  exception when invalid_parameter_value then null; end;
   -- results cannot be changed afterwards
   begin
     update drill_results set drill_hcp = 0 where id = '10000000-0000-0000-0000-000000000001';
@@ -64,7 +75,7 @@ do $$ begin
 end $$;
 update friendships set status = 'accepted' where addressee = auth.uid();
 do $$ begin
-  if (select count(*) from drill_results) <> 1 then raise exception 'FAIL: friend cannot see results'; end if;
+  if (select count(*) from drill_results) <> 2 then raise exception 'FAIL: friend cannot see results'; end if;
   if (select real_hcp from profile_public where display_name = 'Anna') is distinct from 18.4 then raise exception 'FAIL: friend cannot see real HCP'; end if;
 end $$;
 

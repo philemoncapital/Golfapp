@@ -78,3 +78,10 @@ Everything the app computes that is not stated in the drill booklet is listed he
 - 10-Shot Drill: 1 = good (within 10 % of the distance), 2 = good enough (within 20 %), 3 = poor; lower total is better. Distances 60–132 m and the 10 %/20 % limits are our adaptation; the source only defines Good / Good Enough / Poor.
 - Pinseeker: solo version of a two-player game; zones 10 %/20 % of the distance instead of "5 or 10 feet, your call".
 - Collector (achievement) now requires the 4 approach drills as well; Complete Set stays booklet-only.
+
+## Circle scoring for radius drills (Nov 2026, David's decision)
+- Five Different Clubs, Attack the Flag, Wedge Ladder and Random Yardage: **1 point per ball inside my circle**. The circle is the booklet radius of the band of my **real** handicap (band containing it, else the nearest band); without a real handicap the band for HCP 36 is used and the app says so.
+- Training HCP from the points: band met (points ≥ pass mark) → from the band midpoint towards the next better band by the share of balls above the pass mark (best band: towards its lower bound); not met → towards the next worse band (worst band: towards 54) by the missing share. Same rule on the server (0006), parity-tested.
+- The circle used is stored with each result (`band_hi`), so a later handicap change does not reinterpret old results. Older results with per-ball distances keep their old evaluation.
+- Flawless on these drills = every ball inside my circle.
+- Drill texts were clarified from the booklet's scoring column (src/data/textOverrides.ts); Sandy Par counts strokes (par 2 per hole = 10), not points. Beat 21: "goal 21 or fewer" follows from the drill name and the best band.

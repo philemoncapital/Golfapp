@@ -50,6 +50,8 @@ export type ResultInput =
   | { kind: 'value'; value: number }                       // count, points, streak, stations, minutes
   | { kind: 'time_fallback'; hits: number; limit_min: number; required_hits: number } // Chip to a Towel not finished
   | { kind: 'radius'; balls: RadiusBall[] }
+  /** radius drills (since Nov 2026): balls inside the circle of the band given by the real HCP; band_hi identifies that band */
+  | { kind: 'circle'; band_hi: number; hits: number; balls: number }
   | { kind: 'triplet'; achieved: [number, number, number] };
 
 export interface DrillResult { drill_id: string; created_at: string; input: ResultInput }

@@ -11,6 +11,7 @@ import type { ResultInput as RI } from '../engine/types';
 import { signal, keepAwake, canVibrate } from '../lib/feedback';
 import { syncNow } from '../lib/sync';
 import { fmtTarget } from './DrillDetail';
+import { drillQuestion } from '../lib/drillText';
 import type { Band, Drill } from '../engine/types';
 import { snapshot, movesAfterSync, type RankMove } from '../lib/rankChange';
 
@@ -84,7 +85,8 @@ export default function Live() {
         <>
           <div className="card" style={{ padding: 8 }}><Pictogram drill={drill} size="sm" /></div>
           {drill.scoring.random_m && <RandomDistance key={`rd-${drill.id}`} range={drill.scoring.random_m} />}
-          <ResultInput key={drill.id} drill={drill} onChange={setInput} elapsedMin={elapsed / 60} />
+          <p className="live-q">{drillQuestion(drill, settings?.real_hcp ?? null, t)}</p>
+          <ResultInput key={drill.id} drill={drill} onChange={setInput} elapsedMin={elapsed / 60} realHcp={settings?.real_hcp ?? null} />
           <label className="stack small"><span className="label">{t('live.notes')}</span>
             <textarea className="field" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={2000} /></label>
           <div className="grid2">

@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Drill, ResultInput as RI, RadiusBall } from '../engine/types';
+import { circleFor } from '../lib/drillText';
 
 /** Generates the input UI from the drill's scoring type. Calls onChange with a complete ResultInput (or null). */
-export function ResultInput({ drill, onChange, elapsedMin }: { drill: Drill; onChange: (r: RI | null) => void; elapsedMin: number }) {
+export function ResultInput({ drill, onChange, elapsedMin, realHcp }: { drill: Drill; onChange: (r: RI | null) => void; elapsedMin: number; realHcp?: number | null }) {
   const s = drill.scoring;
   switch (s.type) {
     case 'points_per_ball': return <PerBall drill={drill} onChange={onChange} />;
-    case 'radius_by_band': return <Radius total={s.balls ?? 20} buckets={s.buckets} onChange={onChange} />;
+    case 'radius_by_band': return <Circle drill={drill} realHcp={realHcp ?? null} onChange={onChange} />;
     case 'series_triplet': return <Triplet onChange={onChange} />;
     case 'time_lower_better': return <Timed elapsedMin={elapsedMin} limit={drill.duration_min} onChange={onChange} />;
     default: return <Stepper onChange={onChange} />;
@@ -113,6 +114,36 @@ function Timed({ elapsedMin, limit, onChange }: { elapsedMin: number; limit: num
         <button className="btn" onClick={() => { const h = Math.max(0, hits - 1); setHits(h); setDone(null); onChange({ kind: 'time_fallback', hits: h, limit_min: limit, required_hits: 8 }); }}>−</button>
         <b className="num" style={{ fontSize: 22, minWidth: 32, textAlign: 'center' }}>{hits}</b>
         <button className="btn" onClick={() => { const h = Math.min(7, hits + 1); setHits(h); setDone(null); onChange({ kind: 'time_fallback', hits: h, limit_min: limit, required_hits: 8 }); }}>+</button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Radius drills: 1 point per ball inside my circle. The circle is the radius of the booklet band of my REAL handicap
+ * (PROMPT.md 6.1, revised Nov 2026). One tap per ball: in the circle / missed.
+ */
+function Circle({ drill, realHcp, onChange }: { drill: Drill; realHcp: number | null; onChange: (r: RI | null) => void }) {
+  const { t } = useTranslation();
+  const total = drill.scoring.balls ?? 20;
+  const { band, label } = circleFor(drill, realHcp, t('live.green'));
+  const [taps, setTaps] = useState<boolean[]>([]);
+  const update = (n: boolean[]) => { setTaps(n); onChange(n.length ? { kind: 'circle', band_hi: band.hcp_hi, hits: n.filter(Boolean).length, balls: n.length } : null); };
+  const hits = taps.filter(Boolean).length;
+  return (
+    <div className="stack">
+      <div className="row between">
+        <span className="small text-2">{t('live.yourCircle')}: <b style={{ color: 'var(--text)' }}>{label}</b> <span className="muted">(HCP {band.hcp_hi}–{band.hcp_lo})</span></span>
+        <span className="num" style={{ fontSize: 28, fontWeight: 600 }}>{hits}</span>
+      </div>
+      {realHcp == null && <span className="small warn">{t('live.circleNoHcp')}</span>}
+      <div className="grid2">
+        <button className="btn big primary" disabled={taps.length >= total} onClick={() => update([...taps, true])}>+1<small>{t('live.inCircle')}</small></button>
+        <button className="btn big" disabled={taps.length >= total} onClick={() => update([...taps, false])}>0<small>{t('live.missedCircle')}</small></button>
+      </div>
+      <div className="row between small muted">
+        <span className="num">{t('live.ball')} {Math.min(taps.length + 1, total)} / {total}</span>
+        <button className="btn" onClick={() => update(taps.slice(0, -1))} disabled={!taps.length}>{t('live.undo')}</button>
       </div>
     </div>
   );
