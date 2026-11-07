@@ -7,6 +7,7 @@ import { useUser } from '../lib/auth';
 import { supabase } from '../lib/supabase';
 import { isDemo } from '../lib/demo';
 import { StaleHint, Empty } from '../components/Ui';
+import { Leaderboard } from '../components/Leaderboard';
 
 export function useErrorText() {
   const { t } = useTranslation();
@@ -31,7 +32,8 @@ export default function Social() {
   const { t } = useTranslation();
   const user = useUser();
   const [params, setParams] = useSearchParams();
-  const tab = params.get('tab') === 'groups' ? 'groups' : 'friends';
+  const q = params.get('tab');
+  const tab = q === 'groups' || q === 'friends' ? q : 'board';
   const gate = SocialGate({ user });
   return (
     <>
@@ -39,11 +41,11 @@ export default function Social() {
       {gate ?? (user && (
         <>
           <div className="row" role="tablist">
-            {(['friends', 'groups'] as const).map((k) => (
-              <button key={k} role="tab" className="chip" aria-selected={tab === k} aria-pressed={tab === k} onClick={() => setParams(k === 'groups' ? { tab: k } : {})}>{t(`social.${k}`)}</button>
+            {(['board', 'friends', 'groups'] as const).map((k) => (
+              <button key={k} role="tab" className="chip" aria-selected={tab === k} aria-pressed={tab === k} onClick={() => setParams(k === 'board' ? {} : { tab: k })}>{t(`social.${k}`)}</button>
             ))}
           </div>
-          {tab === 'friends' ? <Friends /> : <Groups />}
+          {tab === 'board' ? <BoardTab /> : tab === 'friends' ? <Friends /> : <Groups />}
         </>
       ))}
     </>
@@ -199,4 +201,26 @@ function Groups() {
       </form>
     </>
   );
+}
+
+const PICK_KEY = 'pulse-board-group';
+/** Landing view: leaderboard of one group, chosen in a dropdown (remembered on this device). */
+function BoardTab() {
+  const { t } = useTranslation();
+  const groups = useRemote<MyGroup[]>('groups', api.myGroups);
+  const active = (groups.value ?? []).filter((g) => g.my_status === 'active');
+  const [pick, setPick] = useState<string | null>(() => { try { return localStorage.getItem(PICK_KEY); } catch { return null; } });
+  const gid = active.find((g) => g.group_id === pick)?.group_id ?? active[0]?.group_id ?? null;
+  const choose = (id: string) => { setPick(id); try { localStorage.setItem(PICK_KEY, id); } catch { /* storage blocked */ } };
+  if (!groups.loading && active.length === 0) return <Empty text={t('social.noGroups')} link={{ to: '/social?tab=groups', label: t('social.newGroup') }} />;
+  if (!gid) return null;
+  const header = (
+    <div className="row between">
+      <select className="field select-title" value={gid} onChange={(e) => choose(e.target.value)} aria-label={t('social.groups')}>
+        {active.map((g) => <option key={g.group_id} value={g.group_id}>{g.name}</option>)}
+      </select>
+      <Link to={`/groups/${gid}`} className="small" style={{ flexShrink: 0 }}>{t('social.groupPage')} ›</Link>
+    </div>
+  );
+  return <><StaleHint r={groups} /><Leaderboard key={gid} groupId={gid} header={header} /><span className="small muted">{t('group.last30')}</span></>;
 }

@@ -3,12 +3,12 @@
  * sessions and results on every device. Result inputs are picked so that their training HCP follows each player's
  * skill (real HCP ± category offset, slowly improving) plus noise.
  */
-import seed from '../data/drills.seed.json';
+import { ALL_DRILLS } from '../data/allDrills';
 import { resultHcp } from '../engine/handicap';
 import type { Category, Drill, ResultInput, RadiusBall } from '../engine/types';
 import { DEMO_ME } from '../lib/demo';
 
-const DRILLS = seed as unknown as Drill[];
+const DRILLS = ALL_DRILLS;
 export interface DemoResult { id: string; user_id: string; session_id: string; drill_id: string; input: ResultInput; created_at: string; drill_hcp: number }
 export interface DemoSession { id: string; user_id: string; started_at: string; completed_at: string; drill_ids: string[]; total_min: number }
 export interface DemoPlayer { id: string; name: string; hcp: number; show_real_hcp: boolean; sessions: number }
@@ -37,11 +37,13 @@ function candidates(d: Drill): { input: ResultInput; hcp: number }[] {
   if (s.type === 'radius_by_band') {
     const r = mulberry(d.id.length * 7919);
     const n = s.balls ?? 20;
-    for (let scale = 0.4; scale <= 14; scale += 0.35) for (let k = 0; k < 4; k++) {
+    const bk = s.buckets ? s.buckets.map((x) => x - 0.1) : BUCKETS;
+    const top = bk[bk.length - 1], f = top / 8;
+    for (let scale = 0.4 * f; scale <= 14 * f; scale += 0.35 * f) for (let k = 0; k < 4; k++) {
       add({ kind: 'radius', balls: Array.from({ length: n }, (): RadiusBall => {
         const dist = -scale * Math.log(r() || 1e-9);
-        if (dist > 9 && r() > 0.3) return { dist_m: null, on_green: false };
-        const b = BUCKETS.find((x) => dist <= x) ?? 8;
+        if (dist > top + f && r() > 0.3) return { dist_m: null, on_green: false };
+        const b = bk.find((x) => dist <= x) ?? top;
         return { dist_m: b, on_green: true };
       }) });
     }

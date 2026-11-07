@@ -2,14 +2,14 @@
  * TypeScript mirror of the server-side board, title and achievement rules (0002 / 0003), used only by the demo
  * mode. Tests in compute.test.ts reproduce the scenario of supabase/tests/social_test.sql.
  */
-import seed from '../data/drills.seed.json';
+import { ALL_DRILLS } from '../data/allDrills';
 import type { Category, Drill, ResultInput } from '../engine/types';
 import { CATEGORIES } from '../engine/types';
 import { mid, orderedBands, targetForHcp } from '../engine/handicap';
 import { practiceMinutes } from '../engine/stats';
 import type { AchRow } from '../engine/achievements';
 
-const DRILLS = seed as unknown as Drill[];
+const DRILLS = ALL_DRILLS;
 const drill = (id: string) => DRILLS.find((d) => d.id === id);
 const round1 = (x: number) => Math.floor(x * 10 + 0.5) / 10;
 const DAY = 864e5;

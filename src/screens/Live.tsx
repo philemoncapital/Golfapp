@@ -83,6 +83,7 @@ export default function Live() {
       {!summary ? (
         <>
           <div className="card" style={{ padding: 8 }}><Pictogram drill={drill} size="sm" /></div>
+          {drill.scoring.random_m && <RandomDistance key={`rd-${drill.id}`} range={drill.scoring.random_m} />}
           <ResultInput key={drill.id} drill={drill} onChange={setInput} elapsedMin={elapsed / 60} />
           <label className="stack small"><span className="label">{t('live.notes')}</span>
             <textarea className="field" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={2000} /></label>
@@ -119,5 +120,18 @@ function DrillHowTo({ drill, band }: { drill: Drill; band: Band | null }) {
       {band && <span className="small"><b>{t('live.target')}</b> <span className="text-2">HCP {band.hcp_hi}–{band.hcp_lo}: </span><b className="num">{fmtTarget(band.target)}</b></span>}
       {drill.equipment_de && <span className="small muted">{drill.equipment_de}</span>}
     </section>
+  );
+}
+
+/** Random target distance per ball (Random Yardage): never the same metre value twice in a row. */
+function RandomDistance({ range }: { range: [number, number] }) {
+  const { t } = useTranslation();
+  const roll = (prev?: number) => { let v: number; do { v = range[0] + Math.floor(Math.random() * (range[1] - range[0] + 1)); } while (v === prev); return v; };
+  const [d, setD] = useState(() => roll());
+  return (
+    <div className="card row between" style={{ padding: 12 }}>
+      <span className="stack" style={{ gap: 0 }}><span className="label">{t('live.nextDist')}</span><span className="num" style={{ fontSize: 34, fontWeight: 500 }}>{d} m</span></span>
+      <button className="btn" onClick={() => setD(roll(d))}>🎲 {t('live.roll')}</button>
+    </div>
   );
 }

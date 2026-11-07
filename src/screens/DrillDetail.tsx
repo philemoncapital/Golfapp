@@ -34,7 +34,6 @@ export default function DrillDetail() {
         <div className="card"><span className="label">{t('drills.difficulty')}</span><div className="num" style={{ fontSize: 22, fontWeight: 500 }}>{d.difficulty}/6</div></div>
         <div className="card"><span className="label">{t('drills.target')}</span><div className="num" style={{ fontSize: 22, fontWeight: 500 }}>{myBand ? fmtTarget(myBand.target) : '–'}</div></div>
       </div>
-      {d.needs_verification && <p className="small warn">{t('drills.verify', { what: d.needs_verification })}</p>}
       <div className="card"><Pictogram drill={d} /></div>
       {i18n.language === 'en' && !d.text.en && <p className="small muted">{t('drills.enPending')}</p>}
       <section className="stack">
@@ -52,6 +51,11 @@ export default function DrillDetail() {
           </div>
         </div>
       </section>
+      {d.sources?.length ? (
+        <p className="small muted" style={{ margin: 0 }}>
+          {t('drills.source')}: {d.sources.map((s) => <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer">{s.author} ({s.date.slice(0, 4)})</a>)} · {t('drills.adapted')}
+        </p>
+      ) : null}
       <GroupDrillBoard drillId={d.id} />
       <button className={`btn block ${inPlan ? '' : 'primary'}`} onClick={() => togglePlan(d.id)}>{inPlan ? `✓ ${t('drills.added')}` : t('drills.add')}</button>
     </>

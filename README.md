@@ -8,7 +8,7 @@ Static web app (Vite + React) with Supabase for logins and data. Works offline; 
 2. **Supabase:** create a free account → *New project* → region **Central EU (Frankfurt)** → save the database password.
    - Open the **SQL Editor** → paste the whole of `supabase/migrations/0001_init.sql` → *Run*.
    - New query → paste `supabase/seed.sql` → *Run* (loads the 25 drills).
-   - Then run every further file in `supabase/migrations/` **in order** (`0002_social.sql`, `0003_…`), each once, each in a new query. Never edit an applied migration; changes come as a new file.
+   - Then run every further file in `supabase/migrations/` **in order** (`0002_social.sql` … `0005_approach_drills.sql`), each once, each in a new query. Never edit an applied migration; changes come as a new file.
    - `0002` tries to enable **pg_cron** for the daily title job. If the editor reports a notice instead, enable *Database → Extensions → pg_cron* and run the `cron.schedule(…)` line from the notice.
    - In the project's **API settings**, copy the *Project URL* and the *anon public* key.
    - In **Authentication → Providers → Email**, keep *Confirm email* switched on.

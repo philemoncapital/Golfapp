@@ -6,7 +6,7 @@ export type TitleType = 'leader' | 'last';
 
 const A = 'var(--accent)';
 /** Title pictograms (section 8.2), 32×32, 1.75 px strokes; accent only for the ball or the key element. */
-const ICONS: Record<`${TitleBoard}_${TitleType}`, ReactNode> = {
+export const TITLE_ICON: Record<`${TitleBoard}_${TitleType}`, ReactNode> = {
   // Big Stick: driver with motion lines
   tee_leader: <>
     <path d="M9 4l10 17" /><path d="M18 20.5c2-1 6-1.5 8 0 1 1 .5 3.2-1.5 3.6-2.5.5-5.2.4-6.6-.7-.9-.8-.8-2.3.1-2.9z" />
@@ -69,7 +69,7 @@ export function TitleIcon({ board, type, size = 28, label = true }: { board: Tit
   return (
     <span className="row" style={{ gap: 6 }} title={name}>
       <svg width={size} height={size} viewBox="0 0 32 32" fill="none" stroke="var(--text-2)" strokeWidth="1.75" strokeLinecap="round" role="img" aria-label={name}>
-        {ICONS[`${board}_${type}`]}
+        {TITLE_ICON[`${board}_${type}`]}
       </svg>
       {label && <span className="small" style={{ fontWeight: 600 }}>{name}</span>}
     </span>

@@ -11,7 +11,7 @@ const de = {
     estimate: 'Schätzung aus deinen Übungsergebnissen, kein offizielles Handicap.', setHcp: 'Handicap im Profil eintragen',
     noSessions: 'Noch keine Session. Stell dir unter „Session“ eine zusammen.',
   },
-  drills: { all: 'Alle', min: 'Min', difficulty: 'Anspruch', add: 'Zur Session', added: 'In der Session', verify: 'Wert am Original prüfen: {{what}}', target: 'Ziel für dich', setup: 'Aufbau', goal: 'Ziel', procedure: 'Ablauf', scoring: 'Wertung', enPending: '' },
+  drills: { all: 'Alle', min: 'Min', difficulty: 'Anspruch', add: 'Zur Session', added: 'In der Session', verify: 'Wert am Original prüfen: {{what}}', source: 'Quelle', adapted: 'Wertung und Ziele je HCP sind unsere Annahme', target: 'Ziel für dich', setup: 'Aufbau', goal: 'Ziel', procedure: 'Ablauf', scoring: 'Wertung', enPending: '' },
   session: {
     title: 'Session', total: 'Gesamt', empty: 'Noch keine Übungen. Füge welche aus der Bibliothek hinzu oder lass dir eine Session bauen.',
     haveMinutes: 'Ich habe … Minuten', build: 'Session bauen', start: 'Session starten', remove: 'Entfernen', up: 'Nach oben', down: 'Nach unten',
@@ -21,7 +21,7 @@ const de = {
     remaining: 'Restzeit', drill: 'Übung {{i}} von {{n}}', pause: 'Pause', resume: 'Weiter', skip: 'Überspringen', save: 'Ergebnis speichern',
     quick: 'Gesamtwert eingeben', undo: 'Rückgängig', notes: 'Notizen', result: 'Ergebnis', yourHcp: 'Übungs-Handicap', target: 'Ziel deiner Stufe',
     next: 'Nächste Übung', finish: 'Session beenden', done: 'Session beendet', timeUp: 'Zeit ist um', soundHint: 'Ohne Vibration spielt die App einen Ton – Lautlos-Schalter beachten.',
-    howTo: 'So geht’s', holed: 'Gelocht', green: 'Grün', missed: 'Verfehlt', notFinished: 'Nicht geschafft – Treffer:', minutes: 'Minuten', ball: 'Ball', pos: 'Position',
+    howTo: 'So geht’s', further: 'Weiter', roll: 'Distanz würfeln', nextDist: 'Nächste Distanz', holed: 'Gelocht', green: 'Grün', missed: 'Verfehlt', notFinished: 'Nicht geschafft – Treffer:', minutes: 'Minuten', ball: 'Ball', pos: 'Position',
   },
   profile: {
     title: 'Profil', realHcp: 'Echtes Handicap', goal: 'Wochenziel (Minuten)', language: 'Sprache', accent: 'Akzentfarbe', save: 'Speichern', saved: 'Gespeichert',
@@ -41,7 +41,7 @@ const en: typeof de = {
     estimate: 'Estimated from your drill results, not an official handicap.', setHcp: 'Add your handicap in Profile',
     noSessions: 'No session yet. Build one under “Session”.',
   },
-  drills: { all: 'All', min: 'min', difficulty: 'Difficulty', add: 'Add to session', added: 'In session', verify: 'Check against the booklet: {{what}}', target: 'Your target', setup: 'Setup', goal: 'Goal', procedure: 'Procedure', scoring: 'Scoring', enPending: 'English drill text is added in Phase 2; showing the German original.' },
+  drills: { all: 'All', min: 'min', difficulty: 'Difficulty', add: 'Add to session', added: 'In session', verify: 'Check against the booklet: {{what}}', source: 'Source', adapted: 'scoring and HCP targets are our assumption', target: 'Your target', setup: 'Setup', goal: 'Goal', procedure: 'Procedure', scoring: 'Scoring', enPending: 'English drill text is added in Phase 2; showing the German original.' },
   session: {
     title: 'Session', total: 'Total', empty: 'No drills yet. Add some from the library or let the app build a session.',
     haveMinutes: 'I have … minutes', build: 'Build session', start: 'Start session', remove: 'Remove', up: 'Move up', down: 'Move down',
@@ -51,7 +51,7 @@ const en: typeof de = {
     remaining: 'Time left', drill: 'Drill {{i}} of {{n}}', pause: 'Pause', resume: 'Resume', skip: 'Skip', save: 'Save result',
     quick: 'Enter total', undo: 'Undo', notes: 'Notes', result: 'Result', yourHcp: 'Drill handicap', target: 'Target for your band',
     next: 'Next drill', finish: 'Finish session', done: 'Session finished', timeUp: 'Time is up', soundHint: 'Without vibration the app plays a sound – check the silent switch.',
-    howTo: 'How it works', holed: 'Holed', green: 'Green', missed: 'Missed', notFinished: 'Not finished – hits:', minutes: 'minutes', ball: 'Ball', pos: 'Position',
+    howTo: 'How it works', further: 'Further', roll: 'Roll distance', nextDist: 'Next distance', holed: 'Holed', green: 'Green', missed: 'Missed', notFinished: 'Not finished – hits:', minutes: 'minutes', ball: 'Ball', pos: 'Position',
   },
   profile: {
     title: 'Profile', realHcp: 'Real handicap', goal: 'Weekly goal (minutes)', language: 'Language', accent: 'Accent colour', save: 'Save', saved: 'Saved',
@@ -70,7 +70,7 @@ const de2 = {
     error: 'Das hat nicht geklappt: {{msg}}', rateLimited: 'Zu viele Anfragen – bitte kurz warten.', you: 'Du', min: 'Min',
   },
   social: {
-    title: 'Freunde & Gruppen', friends: 'Freunde', groups: 'Gruppen', search: 'Name oder genaue E-Mail', searchHint: 'Mindestens 2 Buchstaben. E-Mail nur bei exakter Eingabe.',
+    title: 'Freunde & Gruppen', board: 'Rangliste', groupPage: 'Gruppe', friends: 'Freunde', groups: 'Gruppen', search: 'Name oder genaue E-Mail', searchHint: 'Mindestens 2 Buchstaben. E-Mail nur bei exakter Eingabe.',
     add: 'Anfragen', requested: 'Angefragt', accept: 'Annehmen', decline: 'Ablehnen', remove: 'Entfernen', isFriend: 'Befreundet',
     incoming: 'Anfragen an dich', outgoing: 'Gesendet', noFriends: 'Noch keine Freunde. Such oben nach Namen.', noResults: 'Niemand gefunden.',
     newGroup: 'Neue Gruppe', groupName: 'Gruppenname', create: 'Gruppe erstellen', noGroups: 'Noch in keiner Gruppe. Erstell eine und lade Freunde ein.',
@@ -108,7 +108,7 @@ const en2: typeof de2 = {
     error: 'That did not work: {{msg}}', rateLimited: 'Too many requests – please wait a moment.', you: 'You', min: 'min',
   },
   social: {
-    title: 'Friends & groups', friends: 'Friends', groups: 'Groups', search: 'Name or exact email', searchHint: 'At least 2 letters. Email only as an exact match.',
+    title: 'Friends & groups', board: 'Leaderboard', groupPage: 'Group', friends: 'Friends', groups: 'Groups', search: 'Name or exact email', searchHint: 'At least 2 letters. Email only as an exact match.',
     add: 'Add', requested: 'Requested', accept: 'Accept', decline: 'Decline', remove: 'Remove', isFriend: 'Friends',
     incoming: 'Requests for you', outgoing: 'Sent', noFriends: 'No friends yet. Search for a name above.', noResults: 'Nobody found.',
     newGroup: 'New group', groupName: 'Group name', create: 'Create group', noGroups: 'Not in a group yet. Create one and invite friends.',
@@ -163,7 +163,7 @@ const de3 = {
   achv: {
     title: 'Erfolge', medals: 'Medaillen', achievements: 'Achievements', titles: 'Titel-Abzeichen', earned: 'Erreicht am {{date}}', locked: 'Noch gesperrt',
     weeks: '{{n}} Wochen gehalten', holding: 'Aktuell gehalten', drillsDone: 'Geschafft bei: {{list}}', nextTier: 'Nächste Stufe bei {{n}}',
-    unlocked: 'Freigeschaltet: {{name}}', tierUp: '{{name}} – {{tier}}', needsHcp: 'Braucht dein echtes Handicap im Profil.', close: 'Schließen', all: 'Alle Erfolge',
+    unlocked: 'Freigeschaltet: {{name}}', details: 'Details', more: 'noch {{n}}', nextMilestone: 'bis zum nächsten Meilenstein', tierUp: '{{name}} – {{tier}}', needsHcp: 'Braucht dein echtes Handicap im Profil.', close: 'Schließen', all: 'Alle Erfolge',
     signedOut: 'Erfolge werden auf dem Server geprüft – dafür brauchst du ein Konto.',
   },
   ach: {
@@ -172,7 +172,7 @@ const de3 = {
     regular: { name: 'Stammgast', crit: 'Verschiedene Tage mit Session oder Ergebnis: 10 / 30 / 100' },
     goal_getter: { name: 'Zielstrebig', crit: 'Wochen in Folge mit erreichtem Wochenziel: 2 / 4 / 8' },
     pb_machine: { name: 'Rekordjäger', crit: 'Aufgestellte Bestleistungen: 5 / 20 / 50' },
-    round_logger: { name: 'Rundenbuchhalter', crit: 'Eingetragene echte Runden: 5 / 15 / 40' },
+    round_logger: { name: 'Runden\u00ADbuch\u00ADhalter', crit: 'Eingetragene echte Runden: 5 / 15 / 40' },
     first_tee: { name: 'Erster Abschlag', crit: 'Erste Session abgeschlossen' },
     flawless: { name: 'Makellos', crit: 'Maximale Punktzahl in einer Übung erreicht – je Übung wiederholbar' },
     complete_set: { name: 'Komplettes Set', crit: 'Jede Übung aus dem Heft mindestens einmal gespielt' },
@@ -230,7 +230,7 @@ const en3: typeof de3 = {
   achv: {
     title: 'Achievements', medals: 'Medals', achievements: 'Achievements', titles: 'Title badges', earned: 'Earned on {{date}}', locked: 'Locked',
     weeks: 'Held for {{n}} weeks', holding: 'Currently held', drillsDone: 'Done on: {{list}}', nextTier: 'Next tier at {{n}}',
-    unlocked: 'Unlocked: {{name}}', tierUp: '{{name}} – {{tier}}', needsHcp: 'Needs your real handicap in Profile.', close: 'Close', all: 'All achievements',
+    unlocked: 'Unlocked: {{name}}', details: 'Details', more: '{{n}} more', nextMilestone: 'until your next milestone', tierUp: '{{name}} – {{tier}}', needsHcp: 'Needs your real handicap in Profile.', close: 'Close', all: 'All achievements',
     signedOut: 'Achievements are checked on the server – you need an account for them.',
   },
   ach: {

@@ -348,4 +348,73 @@ export const SCENES: Record<string, Scene> = {
     <Dim x1={160} x2={216} y={84} label="90 cm" ctx={c} />
     <Tag x={268} y={130} ctx={c}>leichter Break</Tag><Tag x={262} y={186} ctx={c}>Serie zählen</Tag>
   </>,
+
+  // ---------------- Approach (Phase 5, approved 2026-11-07) ----------------
+  'donald-wedge-ladder': (id, c) => {
+    const ys = Array.from({ length: 10 }, (_, i) => 98 + i * 10);
+    return <>
+      <Range id={id} />
+      <Green id={id} cx={160} cy={40} rx={58} ry={24} />
+      <Ring x={160} y={36} r={24} strong /><Flag x={160} y={38} h={24} />
+      {ys.map((y, i) => <circle key={i} cx={160} cy={y} r={i === 0 ? 3.4 : 2.4} fill={i === 0 ? 'var(--accent)' : COL.marker} stroke="rgba(0,0,0,0.5)" strokeWidth="0.8" />)}
+      <line x1={160} y1={ys[0] + 5} x2={160} y2={ys[9] - 5} stroke="rgba(242,243,245,0.18)" strokeDasharray="2 6" />
+      <Station x={140} y={ys[0]} n={1} ctx={c} r={7} /><Station x={140} y={ys[9]} n={10} ctx={c} r={7} />
+      <Ball x={176} y={ys[0]} r={3} /><Ball x={183} y={ys[0]} r={3} /><Ball x={190} y={ys[0]} r={3} />
+      <Flight from={[160, ys[0] - 5]} to={[158, 44]} bend={-14} id={id} />
+      <Tag x={198} y={ys[0] + 4} ctx={c} anchor="start">69 m · 3 Bälle</Tag><Tag x={176} y={ys[9] + 4} ctx={c} anchor="start">93 m</Tag>
+      <Tag x={62} y={146} ctx={c}>+2,7 m je Station</Tag><Tag x={238} y={34} ctx={c} leader={[184, 40]}>Radius je HCP</Tag>
+      <Tag x={62} y={186} ctx={c}>10 × 3 = 30 Bälle</Tag>
+    </>;
+  },
+  'random-yardage': (id, c) => {
+    const flags: [number, number][] = [[72, 74], [178, 42], [238, 86], [128, 96]];
+    return <>
+      <Range id={id} />
+      <rect x={16} y={24} width={288} height={92} rx="10" fill="rgba(155,227,195,0.06)" stroke="var(--accent)" strokeOpacity="0.35" strokeDasharray="6 5" />
+      {flags.map(([x, y], i) => <g key={i}><Green id={id} cx={x} cy={y} rx={17} ry={9} />{i === 1 && <Ring x={x} y={y - 2} r={19} strong />}<Flag x={x} y={y} h={20} color={i === 1 ? 'var(--accent)' : COL.neutral} /></g>)}
+      <TeeBall x={160} y={184} ctx={c} />
+      <Flight from={[160, 180]} to={[178, 44]} bend={12} id={id} />
+      <Flight from={[160, 180]} to={[72, 76]} bend={-10} muted id={id} />
+      <g transform="translate(40 146)">
+        <rect width="21" height="21" rx="5" fill={COL.neutral} stroke="rgba(0,0,0,0.5)" />
+        {[[5.5, 5.5], [15.5, 5.5], [10.5, 10.5], [5.5, 15.5], [15.5, 15.5]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r="1.9" fill="#0A0B0D" />)}
+      </g>
+      <Tag x={92} y={136} ctx={c}>neue Distanz je Ball</Tag>
+      <Tag x={70} y={16} ctx={c}>Fenster 115–137 m</Tag>
+      <Tag x={262} y={186} ctx={c}>10 Bälle</Tag>
+    </>;
+  },
+  pinseeker: (id, c) => {
+    const fx = 160, fy = 70;
+    const shots: [number, number][] = [[156, 70], [170, 62], [146, 80], [186, 76], [132, 58], [168, 88], [202, 60], [116, 84], [222, 92], [100, 104]];
+    return <>
+      <Range id={id} />
+      <Green id={id} cx={fx} cy={fy} rx={44} ry={22} />
+      <ellipse cx={fx} cy={fy} rx={66} ry={36} fill="none" stroke="rgba(242,243,245,0.55)" strokeWidth="1.3" strokeDasharray="3 3" />
+      <ellipse cx={fx} cy={fy} rx={33} ry={18} fill="rgba(155,227,195,0.10)" stroke="var(--accent)" strokeWidth="1.3" strokeDasharray="3 3" />
+      <Flag x={fx} y={fy + 2} h={24} />
+      {shots.map(([x, y], i) => <Ball key={i} x={x} y={y} r={3} />)}
+      <TeeBall x={160} y={186} ctx={c} />
+      <Flight from={[160, 182]} to={[156, 74]} bend={-12} id={id} />
+      <Dim x1={262} x2={262} y={182} y2={72} vertical label="120 m" ctx={c} />
+      <Tag x={fx + 33} y={fy - 20} ctx={c} anchor="start">12 m</Tag><Tag x={fx + 62} y={fy - 34} ctx={c} anchor="start">24 m</Tag>
+      <Pts x={70} y={40} v="+2" ctx={c} at={[148, 66]} /><Pts x={60} y={70} v="+1" ctx={c} at={[114, 82]} /><Pts x={56} y={128} v="0" ctx={c} weak at={[98, 106]} />
+      <Tag x={86} y={186} ctx={c}>10 Bälle · 1 Fahne</Tag>
+    </>;
+  },
+  'ten-shot-drill': (id, c) => {
+    // monotonic: 1 nearest (low) → 10 furthest (high), zig-zag across the range
+    const tg = Array.from({ length: 10 }, (_, i) => [i % 2 ? 196 + (i % 4 === 1 ? 46 : 0) : 124 - (i % 4 === 0 ? 46 : 0), 160 - i * 14] as [number, number]);
+    const act = tg[6];
+    return <>
+      <Range id={id} />
+      <ellipse cx={act[0]} cy={act[1]} rx={30} ry={15} fill="none" stroke="rgba(242,243,245,0.5)" strokeDasharray="3 3" />
+      <ellipse cx={act[0]} cy={act[1]} rx={15} ry={8} fill="rgba(155,227,195,0.12)" stroke="var(--accent)" strokeDasharray="3 3" />
+      {tg.map(([x, y], i) => <g key={i}><Flag x={x} y={y} h={14} color={i === 6 ? 'var(--accent)' : COL.neutral} />{!c.sm && <text x={x - 12} y={y + 4} fontSize="9" fontWeight="700" textAnchor="end" fill="var(--text-2)">{i + 1}</text>}</g>)}
+      <TeeBall x={160} y={188} ctx={c} />
+      <Flight from={[160, 184]} to={[act[0] + 2, act[1] + 2]} bend={-10} id={id} />
+      
+      <Tag x={262} y={186} ctx={c}>niedrig = gut</Tag><Tag x={70} y={186} ctx={c}>10 Ziele · 10 Schläger</Tag><Tag x={160} y={16} ctx={c}>60–132 m · 1 ≤ 10 % · 2 ≤ 20 % · 3 darüber</Tag>
+    </>;
+  },
 };

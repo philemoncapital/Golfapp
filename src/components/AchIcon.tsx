@@ -5,7 +5,7 @@ export type Tier = 'bronze' | 'silver' | 'gold';
 const TIER_FILL: Record<Tier, string> = { bronze: '#C98A5B', silver: '#C5CBD3', gold: '#E8C25A' };
 
 /** Pictograms for medals and achievements (8.3, 8.4), 32×32, same stroke kit as the title pictograms. */
-const ICONS: Record<string, ReactNode> = {
+export const ACH_ICON: Record<string, ReactNode> = {
   // medals
   range_rat: <><path d="M7 13h18l-2.5 13h-13z" /><circle cx="12" cy="10" r="2.5" /><circle cx="17" cy="8.5" r="2.5" /><circle cx="21" cy="11" r="2.2" /><path d="M10 18h12" /></>,
   grinder: <><circle cx="16" cy="18" r="10" /><path d="M16 18v-6M13 4h6M16 4v4M24.5 9.5l2-2" /></>,
@@ -46,7 +46,7 @@ export function AchIcon({ k, tier, locked, size = 56, label }: { k: string; tier
   return (
     <span className="ach-disc" style={{ width: size, height: size, background: fill ?? 'var(--surface-2)', opacity: locked ? 0.35 : 1, borderColor: fill ?? 'var(--border)' }} role="img" aria-label={label}>
       <svg width={size * 0.6} height={size * 0.6} viewBox="0 0 32 32" fill="none" stroke={fill ? '#0E0F11' : 'var(--text-2)'} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: fill ? '#0E0F11' : 'var(--text-2)' }}>
-        {ICONS[k]}
+        {ACH_ICON[k]}
       </svg>
     </span>
   );
