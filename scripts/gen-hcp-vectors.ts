@@ -18,6 +18,7 @@ for (const d of drills) {
   const sc = d.scoring;
   const add = (input: ResultInput) => rows.push([d.id, input, resultHcp(d, input)]);
   if (sc.type === 'radius_by_band') {
+    for (const b of sc.bands) for (let h = 0; h <= (sc.balls ?? 20); h++) add({ kind: 'circle', band_hi: b.hcp_hi, hits: h, balls: sc.balls ?? 20 });
     const n = sc.balls ?? 20;
     for (let k = 0; k < 120; k++) {
       const len = k < 100 ? n : 1 + Math.floor(rnd() * n);

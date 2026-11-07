@@ -119,7 +119,7 @@ Input UX:
 - A numeric stepper for totals.
 - Every drill can also be entered as a total afterwards: "quick entry".
 
-For `radius_by_band`:
+For `radius_by_band` (revised Nov 2026: one tap per ball, "in my circle" = 1 point / missed; the circle is the radius of the band of my real handicap; the original per-bucket rule below stays valid for older results):
 - Per ball, the user taps the distance bucket the ball finished in (e.g. holed / <1.5 m / <2 m / <3 m / <4 m / <5–7 m / green / missed).
 - The app then computes the score under every band's radius.
 - A band counts as "met" at ≥ 10 of 20 balls for Five Different Clubs, as stated in the booklet. For Attack the Flag no threshold is given, so use ≥ 5 of 9 balls and label this as an assumption.
@@ -271,6 +271,7 @@ Sign up (name, email, password, email verification), then display name, real han
   2. otherwise a "golf ball dropping into the cup" sound, synthesised with the Web Audio API or taken from a CC0-licensed sample (record the source and licence in `CREDITS.md`).
 - On iOS, unlock audio on the user's "Start" tap.
 - Result input as in 6.1, plus per-drill notes (free text).
+- **Above the counter a question says exactly what is counted** (e.g. "How many fairways did you hit?"; radius drills name my circle).
 - **Below the input the drill is explained again** (large pictogram, setup, goal, procedure, the target for my band, equipment), so the player never has to leave the live screen.
 - Pause, skip and finish actions. After each drill, show a summary: result, the booklet target for the user's band, the resulting drill HCP, and the change in group rank.
 

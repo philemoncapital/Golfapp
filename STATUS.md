@@ -28,6 +28,7 @@ Order agreed with David: Phase 6 → Phase 7 → Home screen (9.0) → remaining
 | `0003_achievements.sql` | **to run (after 0002)** |
 | `0004_design_templates.sql` | **to run (after 0003)** – pastel accents, saved sessions |
 | `0005_approach_drills.sql` | **to run (after 0004)** – 4 approach drills + sources |
+| `0006_circle_scoring.sql` | **to run (after 0005)** – radius drills: 1 point per ball in my circle |
 
 ## Tests
 - `npm test` – engine unit tests (Vitest)

@@ -101,3 +101,23 @@ describe('targetForHcp', () => {
     expect(orderedBands(hg)[0].target).toBe(9);
   });
 });
+
+import { circleHcp } from './handicap';
+describe('circle scoring (radius drills, Nov 2026): points = balls inside the circle of my real-HCP band', () => {
+  const fdc = byId('five-different-clubs'); // bands 54-27 green | 26-19 6 m | 18-12 4 m | 11-5 3 m | 4-0 1.5 m, pass 10 of 20
+  it('exactly the pass mark in my band gives the band midpoint', () => {
+    expect(circleHcp(fdc.scoring.bands, 18, 10, 20, 10)).toBe(15);
+  });
+  it('more hits move towards the next better band, fewer towards the next worse band', () => {
+    expect(circleHcp(fdc.scoring.bands, 18, 15, 20, 10)).toBe(11.5); // halfway 15 → 8
+    expect(circleHcp(fdc.scoring.bands, 18, 5, 20, 10)).toBe(18.8); // halfway 15 → 22.5
+    expect(circleHcp(fdc.scoring.bands, 54, 0, 20, 10)).toBe(54);
+    expect(circleHcp(fdc.scoring.bands, 4, 20, 20, 10)).toBeCloseTo(0, 0);
+  });
+  it('is monotonic in hits and resultHcp routes the circle kind', () => {
+    let prev = Infinity;
+    for (let h = 0; h <= 20; h++) { const v = circleHcp(fdc.scoring.bands, 26, h, 20, 10); expect(v).toBeLessThanOrEqual(prev); prev = v; }
+    expect(resultHcp(fdc, { kind: 'circle', band_hi: 18, hits: 10, balls: 20 })).toBe(15);
+    expect(() => circleHcp(fdc.scoring.bands, 99, 1, 20, 10)).toThrow();
+  });
+});
